@@ -57,4 +57,16 @@ public class TokenService {
 
         return claims.getSubject();
     }
+
+    public String getSubjectFromAccessToken(String accessToken) {
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload();
+
+        return claims.getSubject();
+    }
 }
