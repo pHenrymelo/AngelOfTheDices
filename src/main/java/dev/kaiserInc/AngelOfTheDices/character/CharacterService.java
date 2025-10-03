@@ -1,6 +1,9 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterCreateRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterMapper;
+import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterStatusUpdateDTO;
+import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterUpdateDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +63,54 @@ public class CharacterService {
         }
 
         return character;
+    }
+
+    public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateDTO characterData) {
+        Character characterToUpdate = this.findByIdAndUser(characterId, userId);
+
+        characterToUpdate.setName(characterData.name());
+        characterToUpdate.setOrigin(characterData.origin());
+        characterToUpdate.setChar_class(characterData.char_class());
+        characterToUpdate.setNex(characterData.nex());
+        characterToUpdate.setStrength(characterData.strength());
+        characterToUpdate.setAgility(characterData.agility());
+        characterToUpdate.setIntellect(characterData.intellect());
+        characterToUpdate.setPresence(characterData.presence());
+        characterToUpdate.setVigor(characterData.vigor());
+        characterToUpdate.setMaxHitPoints(characterData.maxHitPoints());
+        characterToUpdate.setMaxEffortPoints(characterData.maxEffortPoints());
+        characterToUpdate.setMaxSanity(characterData.maxSanity());
+        characterToUpdate.setRank(characterData.rank());
+        characterToUpdate.setPrestigePoints(characterData.prestigePoints());
+
+        return characterRepository.save(characterToUpdate);
+    }
+
+    public Character patchCharacterStatus(UUID characterId, UUID userId, CharacterStatusUpdateDTO dto) {
+        Character characterToUpdate = this.findByIdAndUser(characterId, userId);
+
+        if (dto.currentHitPoints() != null) {
+            if (dto.currentHitPoints() < 0 || dto.currentHitPoints() > characterToUpdate.getMaxHitPoints()) {
+                throw new IllegalArgumentException("Invalid Hit Points value.");
+            }
+            characterToUpdate.setCurrentHitPoints(dto.currentHitPoints());
+        }
+
+        if (dto.currentEffortPoints() != null) {
+            if (dto.currentEffortPoints() < 0 || dto.currentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
+                throw new IllegalArgumentException("Invalid Effort Points value.");
+            }
+            characterToUpdate.setCurrentEffortPoints(dto.currentEffortPoints());
+        }
+
+
+        if (dto.currentSanity() != null) {
+            if (dto.currentSanity() < 0 || dto.currentSanity() > characterToUpdate.getMaxSanity()) {
+                throw new IllegalArgumentException("Invalid Sanity value.");
+            }
+            characterToUpdate.setCurrentSanity(dto.currentSanity());
+        }
+
+        return characterRepository.save(characterToUpdate);
     }
 }

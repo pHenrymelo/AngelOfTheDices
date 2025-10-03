@@ -1,8 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterCreateRequestDTO;
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterMapper;
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +57,33 @@ public class CharacterController {
         Character character = characterService.findByIdAndUser(characterId, userId);
 
         return ResponseEntity.ok(CharacterMapper.toResponseDTO(character));
+    }
+
+    @PutMapping("/{characterId}")
+    public ResponseEntity<CharacterResponseDTO> updateCharacter(
+            @PathVariable UUID characterId,
+            @Valid @RequestBody CharacterUpdateDTO requestDTO,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        Character updatedCharacter = characterService.updateCharacter(characterId, userId, requestDTO);
+
+        return ResponseEntity.ok(CharacterMapper.toResponseDTO(updatedCharacter));
+    }
+
+    @PatchMapping("/{characterId}/status")
+    public ResponseEntity<CharacterResponseDTO> patchCharacterStatus(
+            @PathVariable UUID characterId,
+            @Valid @RequestBody CharacterStatusUpdateDTO requestDTO,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        Character updatedCharacter = characterService.patchCharacterStatus(characterId, userId, requestDTO);
+
+        return ResponseEntity.ok(CharacterMapper.toResponseDTO(updatedCharacter));
     }
 }
