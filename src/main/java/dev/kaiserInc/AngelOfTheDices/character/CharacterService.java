@@ -6,6 +6,7 @@ import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,5 +45,9 @@ public class CharacterService {
         newCharacter.setUser(user);
 
         return characterRepository.save(newCharacter);
+    }
+
+    public List<Character> findAllByUser(UUID userId) {
+        return characterRepository.findByUserId(userId);
     }
 }
