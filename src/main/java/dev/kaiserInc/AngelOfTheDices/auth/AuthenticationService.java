@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AuthenticationService implements UserDetailsService {
 
@@ -15,6 +17,12 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws  UsernameNotFoundException {
-        return usersRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
+        return usersRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid credentials"));
+    }
+
+    public UserDetails loadUserById(UUID id){
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Resource not found"));
     }
 }

@@ -1,6 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.auth;
 
 import dev.kaiserInc.AngelOfTheDices.config.jwt.TokenService;
+import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.dto.AuthenticateRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.user.dto.AuthenticateResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +14,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
+    private final CookieService cookieService;
+    private final AuthenticationService authenticationService;
+
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    private CookieService cookieService;
-    @Autowired
-    private AuthenticationService authenticationService;
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenService tokenService, CookieService cookieService, AuthenticationService authenticationService) {
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        this.cookieService = cookieService;
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/session")
     public ResponseEntity<AuthenticateResponseDTO> login(@RequestBody AuthenticateRequestDTO authenticateRequestDTO) {
@@ -32,8 +39,11 @@ public class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(authenticateRequestDTO.email(), authenticateRequestDTO.password())
         );
 
-        String accessToken = tokenService.generateAccessToken(auth);
-        String refreshToken = tokenService.generateRefreshToken(auth);
+        User user = (User) auth.getPrincipal();
+
+        String accessToken = tokenService.generateAccessToken(user);
+        String refreshToken = tokenService.generateRefreshToken(user);
+
         ResponseCookie refreshTokenCookie = cookieService.createRefreshTokenCookie(refreshToken);
 
         return ResponseEntity.ok()
@@ -43,11 +53,11 @@ public class AuthenticationController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticateResponseDTO> refreshToken(@CookieValue(name = "refreshToken") String refreshTokenValue) {
-        String userEmail = tokenService.getSubjectFromRefreshToken(refreshTokenValue);
-        UserDetails userDetails = authenticationService.loadUserByUsername(userEmail);
+        String userId = tokenService.getSubjectFromRefreshToken(refreshTokenValue);
+        UserDetails userDetails = authenticationService.loadUserById(UUID.fromString(userId));
         Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        String newAccessToken = tokenService.generateAccessToken(auth);
+        String newAccessToken = tokenService.generateAccessToken((User) userDetails);
 
         return ResponseEntity.ok(new AuthenticateResponseDTO(newAccessToken));
     }

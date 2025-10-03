@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.config.jwt;
 
+import dev.kaiserInc.AngelOfTheDices.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -24,12 +25,12 @@ public class TokenService {
     private final long FifteenMinutesInMilisseconds = 1000 * 60 * 15;
     private final long SevenDaysInMilisseconds = 1000 * 60 * 60 * 24 * 7;
 
-    public String generateAccessToken(Authentication authentication) {
-        return generateToken(authentication.getName(), FifteenMinutesInMilisseconds, jwtSecret);
+    public String generateAccessToken(User user) {
+        return generateToken(user.getId().toString(), FifteenMinutesInMilisseconds, jwtSecret);
     }
 
-    public String generateRefreshToken(Authentication authentication) {
-        return generateToken(authentication.getName(), SevenDaysInMilisseconds, jwtRefreshSecret);
+    public String generateRefreshToken(User user) {
+        return generateToken(user.getId().toString(), SevenDaysInMilisseconds, jwtRefreshSecret);
     }
 
     public String generateToken(String subject, long duration, String secret) {

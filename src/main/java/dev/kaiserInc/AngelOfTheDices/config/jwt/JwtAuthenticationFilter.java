@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.config.jwt;
 
+import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.stereotype.Component;
 import dev.kaiserInc.AngelOfTheDices.auth.AuthenticationService;
 import jakarta.servlet.FilterChain;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -20,7 +22,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private  AuthenticationService authenticationService;
+    private UsersRepository usersRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,11 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(token != null) {
             try {
                 String subject = tokenService.getSubjectFromAccessToken(token);
-                UserDetails user = authenticationService.loadUserByUsername(subject);
+                UUID userId = UUID.fromString(subject);
 
-                var autentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                UserDetails user = usersRepository.findById(userId)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
 
-                SecurityContextHolder.getContext().setAuthentication(autentication);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 logger.debug("Invalid access token: " + e.getMessage());
             }
