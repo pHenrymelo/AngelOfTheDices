@@ -86,4 +86,18 @@ public class CharacterController {
 
         return ResponseEntity.ok(CharacterMapper.toResponseDTO(updatedCharacter));
     }
+
+    @DeleteMapping("/{characterId}")
+    public ResponseEntity<Void> deleteCharacter(
+            @PathVariable UUID characterId,
+            Authentication authentication
+    ) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        characterService.deleteCharacter(characterId, userId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

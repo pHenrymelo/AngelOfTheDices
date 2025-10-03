@@ -113,4 +113,9 @@ public class CharacterService {
 
         return characterRepository.save(characterToUpdate);
     }
+
+    public void deleteCharacter(UUID characterId, UUID userId) {
+        Character characterToDelete = this.findByIdAndUser(characterId, userId);
+        characterRepository.delete(characterToDelete);
+    }
 }
