@@ -50,4 +50,15 @@ public class CharacterService {
     public List<Character> findAllByUser(UUID userId) {
         return characterRepository.findByUserId(userId);
     }
+
+    public Character findByIdAndUser(UUID id, UUID userId) {
+        Character character = characterRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Resource not found"));
+
+        if (!character.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Permission denied");
+        }
+
+        return character;
+    }
 }

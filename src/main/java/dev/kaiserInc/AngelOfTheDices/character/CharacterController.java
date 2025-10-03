@@ -47,4 +47,17 @@ public class CharacterController {
 
         return ResponseEntity.ok(responseDTOs);
     }
+
+    @GetMapping("/{characterId}")
+    public ResponseEntity<CharacterResponseDTO> getById(
+            @PathVariable UUID characterId,
+            Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
+        UUID userId = user.getId();
+
+        Character character = characterService.findByIdAndUser(characterId, userId);
+
+        return ResponseEntity.ok(CharacterMapper.toResponseDTO(character));
+    }
 }
