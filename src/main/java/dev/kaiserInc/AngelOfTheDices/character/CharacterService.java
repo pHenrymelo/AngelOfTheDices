@@ -2,12 +2,14 @@ package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -136,5 +138,18 @@ public class CharacterService {
         character.getExpertises().add(expertiseToUpdate);
 
         return characterRepository.save(character);
+    }
+
+    public Set<CharacterExpertise> findAllExpertisesByCharacter(UUID characterId, UUID userId) {
+        Character character = findByIdAndUser(characterId, userId);
+        return character.getExpertises();
+    }
+
+    public CharacterExpertise findExpertiseByName(UUID characterId, UUID userId, ExpertiseName expertiseName) {
+        Character character = findByIdAndUser(characterId, userId);
+        return character.getExpertises().stream()
+                .filter(exp -> exp.getExpertiseName().equals(expertiseName))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Expertise not found"));
     }
 }
