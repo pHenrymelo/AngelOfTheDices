@@ -23,6 +23,8 @@ public class Character {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String portraitURL;
+
     @Column(nullable = false)
     private String name;
     private Integer nex;

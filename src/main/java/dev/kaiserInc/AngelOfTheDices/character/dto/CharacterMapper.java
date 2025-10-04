@@ -11,7 +11,7 @@ public class CharacterMapper {
             character.getPresence(), character.getVigor(), character.getMaxHitPoints(),
             character.getCurrentHitPoints(), character.getMaxEffortPoints(),
             character.getCurrentEffortPoints(), character.getMaxSanity(), character.getCurrentSanity(),
-            character.getRank(), character.getPrestigePoints()
+            character.getRank(), character.getPrestigePoints(), character.getPortraitURL()
         );
     }
 

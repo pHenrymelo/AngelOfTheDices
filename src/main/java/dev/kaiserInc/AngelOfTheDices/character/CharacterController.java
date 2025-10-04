@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -143,5 +144,19 @@ public class CharacterController {
         CharacterExpertise expertise = characterService.findExpertiseByName(characterId, userId, expertiseName);
 
         return ResponseEntity.ok(expertise);
+    }
+
+    @PostMapping("/{characterId}/portrait")
+    public ResponseEntity<CharacterResponseDTO> uploadPortrait(
+            @PathVariable UUID characterId,
+            @RequestParam("file")MultipartFile file,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        Character updatedCharacter = characterService.setCharacterPortrait(characterId, userId, file);
+
+        return ResponseEntity.ok(CharacterMapper.toResponseDTO(updatedCharacter));
     }
 }

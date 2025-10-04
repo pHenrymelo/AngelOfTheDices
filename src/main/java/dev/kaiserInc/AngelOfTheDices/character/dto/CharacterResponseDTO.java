@@ -23,5 +23,6 @@ public record CharacterResponseDTO(
         Integer maxSanity,
         Integer currentSanity,
         String rank,
-        Integer prestigePoints
+        Integer prestigePoints,
+        String portraitURL
 ) {}

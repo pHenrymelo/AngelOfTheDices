@@ -1,15 +1,19 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
+import ch.qos.logback.core.util.StringUtil;
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
+import dev.kaiserInc.AngelOfTheDices.storage.FileStorageService;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -22,6 +26,8 @@ public class CharacterService {
     private CharacterRepository characterRepository;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public Character createCharacter(CharacterCreateRequestDTO dto, UUID userId) {
         User user = usersRepository.findById(userId)
@@ -160,5 +166,23 @@ public class CharacterService {
                 .filter(exp -> exp.getExpertiseName().equals(expertiseName))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Expertise not found"));
+    }
+
+    public Character setCharacterPortrait(UUID characterId, UUID userId, MultipartFile file) {
+        Character character = findByIdAndUser(characterId, userId);
+
+        if (file.getContentType() == null || !file.getContentType().startsWith("image/")) {
+            throw new BusinessRuleException("Invalid file type. Only images are allowed.");
+        }
+
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String filename = characterId.toString() + "." + extension;
+
+        fileStorageService.store(file, filename);
+
+        String fileUrl = "/portraits/" + filename;
+
+        character.setPortraitURL(fileUrl);
+        return characterRepository.save(character);
     }
 }

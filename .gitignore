@@ -34,3 +34,6 @@ build/
 
 # Docker persistent data
 /pgdata/
+
+# Upload files
+/uploads/
