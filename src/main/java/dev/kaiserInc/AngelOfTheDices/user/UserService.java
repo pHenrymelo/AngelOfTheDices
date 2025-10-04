@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.user;
 
+import dev.kaiserInc.AngelOfTheDices.exception.types.DataConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class UserService {
 
     public User createUser(User user) {
         if(usersRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use");
+            throw new DataConflictException("Email already in use");
         }
 
         String hashedPassword = passwordEncoder.encode(user.getPassword());

@@ -3,6 +3,8 @@ package dev.kaiserInc.AngelOfTheDices.character;
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +58,10 @@ public class CharacterService {
 
     public Character findByIdAndUser(UUID id, UUID userId) {
         Character character = characterRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
 
         if (!character.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Permission denied");
+            throw new ForbidenAccessException("Permission denied");
         }
 
         return character;
@@ -150,6 +152,6 @@ public class CharacterService {
         return character.getExpertises().stream()
                 .filter(exp -> exp.getExpertiseName().equals(expertiseName))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Expertise not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Expertise not found"));
     }
 }
