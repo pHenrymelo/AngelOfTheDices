@@ -1,9 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterCreateRequestDTO;
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterMapper;
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterStatusUpdateDTO;
-import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterUpdateDTO;
+import dev.kaiserInc.AngelOfTheDices.character.dto.*;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,5 +115,26 @@ public class CharacterService {
     public void deleteCharacter(UUID characterId, UUID userId) {
         Character characterToDelete = this.findByIdAndUser(characterId, userId);
         characterRepository.delete(characterToDelete);
+    }
+
+    public Character setExpertise(UUID characterId, UUID userId, SetExpertiseRequestDTO dto) {
+        Character character = findByIdAndUser(characterId, userId);
+
+        CharacterExpertise expertiseToUpdate = character.getExpertises().stream()
+                .filter(exp -> exp.getExpertiseName().equals(dto.expertiseName()))
+                .findFirst()
+                .orElse(new CharacterExpertise());
+
+        expertiseToUpdate.setExpertiseName(dto.expertiseName());
+        expertiseToUpdate.setTrainingRank(dto.trainingRank());
+
+        if (dto.hasKit() != null) {
+            expertiseToUpdate.setHasKit(dto.hasKit());
+        }
+
+        character.getExpertises().remove(expertiseToUpdate);
+        character.getExpertises().add(expertiseToUpdate);
+
+        return characterRepository.save(character);
     }
 }

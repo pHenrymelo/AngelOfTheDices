@@ -1,10 +1,13 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
+import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -45,6 +48,9 @@ public class Character {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "character_expertises", joinColumns = @JoinColumn(name = "character_id"))
+    private Set<CharacterExpertise> expertises = new HashSet<>();
 
 
 }

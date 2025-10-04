@@ -100,4 +100,18 @@ public class CharacterController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{characterId}/expertises")
+    public ResponseEntity<CharacterResponseDTO> setExpertise(
+            @PathVariable UUID characterId,
+            @Valid @RequestBody SetExpertiseRequestDTO requestDTO,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        Character updatedCharacter = characterService.setExpertise(characterId, userId, requestDTO);
+
+        return ResponseEntity.ok(CharacterMapper.toResponseDTO(updatedCharacter));
+    }
 }
