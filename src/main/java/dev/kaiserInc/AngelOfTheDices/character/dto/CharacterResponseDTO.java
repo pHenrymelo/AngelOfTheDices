@@ -1,12 +1,15 @@
 package dev.kaiserInc.AngelOfTheDices.character.dto;
 
+import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
+import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
+
 import java.util.UUID;
 
 public record CharacterResponseDTO(
         UUID id,
         String name,
-        String origin,
-        String char_class,
+        Origin origin,
+        CharacterClass charClass,
         Integer nex,
         Integer strength,
         Integer agility,

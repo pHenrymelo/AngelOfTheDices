@@ -3,6 +3,7 @@ package dev.kaiserInc.AngelOfTheDices.character;
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
+import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import dev.kaiserInc.AngelOfTheDices.user.User;
@@ -26,11 +27,17 @@ public class CharacterService {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Authenticated user nor found"));
 
+        if (dto.path().getCharacterClass() != dto.characterClass()) {
+            throw new BusinessRuleException("The path '" +dto.path().getDisplayName() + "' is not valid for class '" + dto.characterClass().name() + "'.");
+        }
+
         Character newCharacter = new Character();
 
         newCharacter.setName(dto.name());
         newCharacter.setOrigin(dto.origin());
-        newCharacter.setChar_class(dto.char_class());
+        newCharacter.setCharacterClass(dto.characterClass());
+        newCharacter.setPath(dto.path());
+        newCharacter.setAffinity(dto.affinity());
         newCharacter.setNex(dto.nex());
         newCharacter.setStrength(dto.strength());
         newCharacter.setAgility(dto.agility());
@@ -72,7 +79,7 @@ public class CharacterService {
 
         characterToUpdate.setName(characterData.name());
         characterToUpdate.setOrigin(characterData.origin());
-        characterToUpdate.setChar_class(characterData.char_class());
+        characterToUpdate.setCharacterClass(characterData.characterClass());
         characterToUpdate.setNex(characterData.nex());
         characterToUpdate.setStrength(characterData.strength());
         characterToUpdate.setAgility(characterData.agility());
