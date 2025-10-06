@@ -5,24 +5,34 @@ import dev.kaiserInc.AngelOfTheDices.character.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CharacterCreateRequestDTO(
         @NotBlank String name,
+        Integer age,
+        String gender,
+
         @NotNull Origin origin,
         @NotNull CharacterClass characterClass,
         @NotNull Path path,
         @NotNull Affinity affinity,
-        @NotNull Integer nex,
+        @NotNull Rank rank,
+
+        @NotNull @Min(0) Integer nex,
+        @NotNull @Min(0) Integer prestigePoints,
+
         @NotNull Integer strength,
         @NotNull Integer agility,
-        @NotNull Integer presence,
         @NotNull Integer intellect,
+        @NotNull Integer presence,
         @NotNull Integer vigor,
-        @NotNull Integer maxHitPoints,
-        @NotNull Integer maxEffortPoints,
-        @NotNull Integer maxSanity,
-        @NotNull Rank rank,
-        @NotNull Integer prestigePoints
+
+        @NotNull @Min(1) Integer maxHitPoints,
+        @NotNull @Min(1) Integer maxEffortPoints,
+        @NotNull @Min(1) Integer maxSanity,
+
+        Integer armorDefenseBonus,
+        Integer otherDefenseBonus
 ) {}

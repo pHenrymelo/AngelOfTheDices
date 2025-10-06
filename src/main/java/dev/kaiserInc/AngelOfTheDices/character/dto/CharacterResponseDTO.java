@@ -21,32 +21,32 @@ import java.util.UUID;
 public record CharacterResponseDTO(
         UUID id,
         String name,
+        String playerName,
+        Integer age,
+        String gender,
+        String portraitUrl,
         Integer nex,
-        String portraitURL,
+        Integer prestigePoints,
 
         Origin origin,
-        CharacterClass charClass,
+        CharacterClass characterClass,
         Path path,
         Affinity affinity,
         Rank rank,
 
-        Integer strength,
-        Integer agility,
-        Integer intellect,
-        Integer presence,
-        Integer vigor,
+        Integer strength, Integer agility, Integer intellect, Integer presence, Integer vigor,
 
-        Integer maxHitPoints,
-        Integer currentHitPoints,
-        Integer maxEffortPoints,
-        Integer currentEffortPoints,
-        Integer maxSanity,
-        Integer currentSanity,
+        Integer maxHitPoints, Integer currentHitPoints,
+        Integer maxEffortPoints, Integer currentEffortPoints,
+        Integer maxSanity, Integer currentSanity,
+
+        Integer pePerRound,
+        Integer movement,
+        Integer defense,
 
         Integer maxLoad,
         Integer currentLoad,
 
-        Integer prestigePoints,
         Map<Integer, Integer> itemLimitsByCategory,
 
         Set<CharacterExpertise> expertises,
@@ -54,5 +54,4 @@ public record CharacterResponseDTO(
         List<AttackResponseDTO> attacks,
         List<AbilityResponseDTO> abilities,
         List<RitualResponseDTO> rituals
-
 ) {}

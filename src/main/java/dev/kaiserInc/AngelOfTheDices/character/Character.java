@@ -30,6 +30,9 @@ public class Character {
     private Integer nex;
     private String portraitUrl;
 
+    private Integer age;
+    private String gender;
+
     @Enumerated(EnumType.STRING)
     private CharacterClass characterClass;
 
@@ -60,6 +63,9 @@ public class Character {
     private Integer maxSanity;
     private Integer currentSanity;
 
+    private Integer armorDefenseBonus;
+    private Integer otherDefenseBonus;
+
     private Integer prestigePoints;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -88,6 +94,4 @@ public class Character {
         }
         return this.strength * 5;
     }
-
-
 }
