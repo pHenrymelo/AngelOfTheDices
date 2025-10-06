@@ -1,8 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
-import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
-import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -65,7 +62,7 @@ public class CharacterController {
     @PutMapping("/{characterId}")
     public ResponseEntity<CharacterResponseDTO> updateCharacter(
             @PathVariable UUID characterId,
-            @Valid @RequestBody CharacterUpdateDTO requestDTO,
+            @Valid @RequestBody CharacterUpdateRequestDTO requestDTO,
             Authentication authentication) {
 
         User userPrincipal = (User) authentication.getPrincipal();

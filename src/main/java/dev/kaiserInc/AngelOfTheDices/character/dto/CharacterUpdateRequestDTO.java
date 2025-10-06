@@ -9,18 +9,30 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CharacterUpdateDTO(
+public record CharacterUpdateRequestDTO(
         @NotBlank String name,
-        @NotBlank Origin origin,
-        @NotBlank CharacterClass characterClass,
+        Integer age,
+        String gender,
+
+        @NotNull Origin origin,
+        @NotNull CharacterClass characterClass,
         @NotNull Path path,
         @NotNull Affinity affinity,
-        @NotNull Integer nex,
-        @NotNull Integer strength, @NotNull Integer agility, @NotNull Integer intellect,
-        @NotNull Integer presence, @NotNull Integer vigor,
+        @NotNull Rank rank,
+
+        @NotNull @Min(0) Integer nex,
+        @NotNull @Min(0) Integer prestigePoints,
+
+        @NotNull Integer strength,
+        @NotNull Integer agility,
+        @NotNull Integer intellect,
+        @NotNull Integer presence,
+        @NotNull Integer vigor,
+
         @NotNull @Min(1) Integer maxHitPoints,
         @NotNull @Min(1) Integer maxEffortPoints,
         @NotNull @Min(1) Integer maxSanity,
-        @NotNull Rank rank,
-        @NotNull Integer prestigePoints
+
+        @NotNull Integer armorDefenseBonus,
+        @NotNull Integer otherDefenseBonus
 ) {}

@@ -18,45 +18,26 @@ import java.util.UUID;
 @Service
 public class CharacterService {
 
-    @Autowired
-    private CharactersRepository charactersRepository;
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private FileStorageService fileStorageService;
+    private final CharactersRepository charactersRepository;
+    private final UsersRepository usersRepository;
+    private final FileStorageService fileStorageService;
 
+    @Autowired
+    public CharacterService(CharactersRepository charactersRepository, UsersRepository usersRepository, FileStorageService fileStorageService) {
+        this.charactersRepository = charactersRepository;
+        this.usersRepository = usersRepository;
+        this.fileStorageService = fileStorageService;
+    }
 
     public Character createCharacter(CharacterCreateRequestDTO dto, UUID userId) {
         User user = usersRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Authenticated user nor found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user nor found"));
 
         if (dto.path().getCharacterClass() != dto.characterClass()) {
             throw new BusinessRuleException("The path '" +dto.path().getDisplayName() + "' is not valid for class '" + dto.characterClass().name() + "'.");
         }
 
-        Character newCharacter = new Character();
-
-        newCharacter.setName(dto.name());
-        newCharacter.setOrigin(dto.origin());
-        newCharacter.setCharacterClass(dto.characterClass());
-        newCharacter.setPath(dto.path());
-        newCharacter.setAffinity(dto.affinity());
-        newCharacter.setNex(dto.nex());
-        newCharacter.setStrength(dto.strength());
-        newCharacter.setAgility(dto.agility());
-        newCharacter.setIntellect(dto.intellect());
-        newCharacter.setPresence(dto.presence());
-        newCharacter.setVigor(dto.vigor());
-        newCharacter.setMaxHitPoints(dto.maxHitPoints());
-        newCharacter.setMaxEffortPoints(dto.maxEffortPoints());
-        newCharacter.setMaxSanity(dto.maxSanity());
-        newCharacter.setRank(dto.rank());
-        newCharacter.setPrestigePoints(dto.prestigePoints());
-
-        newCharacter.setCurrentHitPoints(dto.maxHitPoints());
-        newCharacter.setCurrentEffortPoints(dto.maxEffortPoints());
-        newCharacter.setCurrentSanity(dto.maxSanity());
-
+        Character newCharacter = CharacterMapper.toEntity(dto);
         newCharacter.setUser(user);
 
         return charactersRepository.save(newCharacter);
@@ -68,7 +49,7 @@ public class CharacterService {
 
     public Character findCharacterByIdAndUser(UUID id, UUID userId) {
         Character character = charactersRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
 
         if (!character.getUser().getId().equals(userId)) {
             throw new ForbiddenAccessException("Permission denied");
@@ -77,23 +58,10 @@ public class CharacterService {
         return character;
     }
 
-    public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateDTO characterData) {
+    public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateRequestDTO characterData) {
         Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
 
-        characterToUpdate.setName(characterData.name());
-        characterToUpdate.setOrigin(characterData.origin());
-        characterToUpdate.setCharacterClass(characterData.characterClass());
-        characterToUpdate.setNex(characterData.nex());
-        characterToUpdate.setStrength(characterData.strength());
-        characterToUpdate.setAgility(characterData.agility());
-        characterToUpdate.setIntellect(characterData.intellect());
-        characterToUpdate.setPresence(characterData.presence());
-        characterToUpdate.setVigor(characterData.vigor());
-        characterToUpdate.setMaxHitPoints(characterData.maxHitPoints());
-        characterToUpdate.setMaxEffortPoints(characterData.maxEffortPoints());
-        characterToUpdate.setMaxSanity(characterData.maxSanity());
-        characterToUpdate.setRank(characterData.rank());
-        characterToUpdate.setPrestigePoints(characterData.prestigePoints());
+        CharacterMapper.updateEntityFromDTO(characterData, characterToUpdate);
 
         return charactersRepository.save(characterToUpdate);
     }
@@ -103,14 +71,14 @@ public class CharacterService {
 
         if (dto.currentHitPoints() != null) {
             if (dto.currentHitPoints() < 0 || dto.currentHitPoints() > characterToUpdate.getMaxHitPoints()) {
-                throw new IllegalArgumentException("Invalid Hit Points value.");
+                throw new BusinessRuleException("Invalid Hit Points value.");
             }
             characterToUpdate.setCurrentHitPoints(dto.currentHitPoints());
         }
 
         if (dto.currentEffortPoints() != null) {
             if (dto.currentEffortPoints() < 0 || dto.currentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
-                throw new IllegalArgumentException("Invalid Effort Points value.");
+                throw new BusinessRuleException("Invalid Effort Points value.");
             }
             characterToUpdate.setCurrentEffortPoints(dto.currentEffortPoints());
         }
@@ -118,7 +86,7 @@ public class CharacterService {
 
         if (dto.currentSanity() != null) {
             if (dto.currentSanity() < 0 || dto.currentSanity() > characterToUpdate.getMaxSanity()) {
-                throw new IllegalArgumentException("Invalid Sanity value.");
+                throw new BusinessRuleException("Invalid Sanity value.");
             }
             characterToUpdate.setCurrentSanity(dto.currentSanity());
         }
