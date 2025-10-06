@@ -1,11 +1,9 @@
-package dev.kaiserInc.AngelOfTheDices.character;
+package dev.kaiserInc.AngelOfTheDices.item;
 
-import dev.kaiserInc.AngelOfTheDices.item.Item;
 import dev.kaiserInc.AngelOfTheDices.item.dto.ItemRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.item.dto.ItemResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,11 +17,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/characters/{characterId}/inventory")
 public class InventoryController {
 
-    @Autowired
-    private CharacterService characterService;
+    private final InventoryService inventoryService;
+
+    public InventoryController(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
+    }
+
 
     private ItemResponseDTO toItemResponseDTO(Item item) {
-        return new ItemResponseDTO(item.getId(), item.getName(), item.getDescription(), item.getCategory(), item.getSpaces());
+        return new ItemResponseDTO(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getCategory(),
+                item.getSpaces());
     }
 
     @PostMapping
@@ -34,7 +41,7 @@ public class InventoryController {
 
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
-        Item newItem = characterService.createItemForCharacter(characterId, userId, requestDTO);
+        Item newItem = inventoryService.createItemForCharacter(characterId, userId, requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(toItemResponseDTO(newItem));
     }
 
@@ -46,7 +53,7 @@ public class InventoryController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Item> items = characterService.findAllItemsByCharacter(characterId, userId);
+        List<Item> items = inventoryService.findAllItemsByCharacter(characterId, userId);
         List<ItemResponseDTO> dtos = items.stream().map(this::toItemResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
@@ -60,7 +67,7 @@ public class InventoryController {
 
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
-        Item updatedItem = characterService.updateItemForCharacter(characterId, itemId, userId, requestDTO);
+        Item updatedItem = inventoryService.updateItemForCharacter(characterId, itemId, userId, requestDTO);
         return ResponseEntity.ok(toItemResponseDTO(updatedItem));
     }
 
@@ -72,7 +79,7 @@ public class InventoryController {
 
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
-        characterService.deleteItemForCharacter(characterId, itemId, userId);
+        inventoryService.deleteItemForCharacter(characterId, itemId, userId);
         return ResponseEntity.noContent().build();
     }
 }

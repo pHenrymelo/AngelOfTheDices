@@ -1,14 +1,9 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
-import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
-import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
-import dev.kaiserInc.AngelOfTheDices.item.Item;
-import dev.kaiserInc.AngelOfTheDices.item.ItemsRepository;
-import dev.kaiserInc.AngelOfTheDices.item.dto.ItemRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.storage.FileStorageService;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
@@ -25,13 +20,12 @@ import java.util.UUID;
 public class CharacterService {
 
     @Autowired
-    private CharacterRepository characterRepository;
+    private CharactersRepository charactersRepository;
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
     private FileStorageService fileStorageService;
-    @Autowired
-    private ItemsRepository itemsRepository;
+
 
     public Character createCharacter(CharacterCreateRequestDTO dto, UUID userId) {
         User user = usersRepository.findById(userId)
@@ -66,15 +60,15 @@ public class CharacterService {
 
         newCharacter.setUser(user);
 
-        return characterRepository.save(newCharacter);
+        return charactersRepository.save(newCharacter);
     }
 
     public List<Character> findAllByUser(UUID userId) {
-        return characterRepository.findByUserId(userId);
+        return charactersRepository.findByUserId(userId);
     }
 
     public Character findCharacterByIdAndUser(UUID id, UUID userId) {
-        Character character = characterRepository.findById(id)
+        Character character = charactersRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
 
         if (!character.getUser().getId().equals(userId)) {
@@ -102,7 +96,7 @@ public class CharacterService {
         characterToUpdate.setRank(characterData.rank());
         characterToUpdate.setPrestigePoints(characterData.prestigePoints());
 
-        return characterRepository.save(characterToUpdate);
+        return charactersRepository.save(characterToUpdate);
     }
 
     public Character patchCharacterStatus(UUID characterId, UUID userId, CharacterStatusUpdateDTO dto) {
@@ -130,47 +124,15 @@ public class CharacterService {
             characterToUpdate.setCurrentSanity(dto.currentSanity());
         }
 
-        return characterRepository.save(characterToUpdate);
+        return charactersRepository.save(characterToUpdate);
     }
 
     public void deleteCharacter(UUID characterId, UUID userId) {
         Character characterToDelete = this.findCharacterByIdAndUser(characterId, userId);
-        characterRepository.delete(characterToDelete);
+        charactersRepository.delete(characterToDelete);
     }
 
-    public Character setExpertise(UUID characterId, UUID userId, SetExpertiseRequestDTO dto) {
-        Character character = findCharacterByIdAndUser(characterId, userId);
 
-        CharacterExpertise expertiseToUpdate = character.getExpertises().stream()
-                .filter(exp -> exp.getExpertiseName().equals(dto.expertiseName()))
-                .findFirst()
-                .orElse(new CharacterExpertise());
-
-        expertiseToUpdate.setExpertiseName(dto.expertiseName());
-        expertiseToUpdate.setTrainingRank(dto.trainingRank());
-
-        if (dto.hasKit() != null) {
-            expertiseToUpdate.setHasKit(dto.hasKit());
-        }
-
-        character.getExpertises().remove(expertiseToUpdate);
-        character.getExpertises().add(expertiseToUpdate);
-
-        return characterRepository.save(character);
-    }
-
-    public Set<CharacterExpertise> findAllExpertisesByCharacter(UUID characterId, UUID userId) {
-        Character character = findCharacterByIdAndUser(characterId, userId);
-        return character.getExpertises();
-    }
-
-    public CharacterExpertise findExpertiseByName(UUID characterId, UUID userId, ExpertiseName expertiseName) {
-        Character character = findCharacterByIdAndUser(characterId, userId);
-        return character.getExpertises().stream()
-                .filter(exp -> exp.getExpertiseName().equals(expertiseName))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Expertise not found"));
-    }
 
     public Character setCharacterPortrait(UUID characterId, UUID userId, MultipartFile file) {
         Character character = findCharacterByIdAndUser(characterId, userId);
@@ -187,55 +149,6 @@ public class CharacterService {
         String fileUrl = "/portraits/" + filename;
 
         character.setPortraitUrl(fileUrl);
-        return characterRepository.save(character);
-    }
-
-    public Item createItemForCharacter(UUID characterId, UUID userId, ItemRequestDTO itemDto) {
-        Character character = findCharacterByIdAndUser(characterId, userId);
-
-        Item newItem = new Item();
-        newItem.setName(itemDto.name());
-        newItem.setDescription(itemDto.description());
-        newItem.setCategory(itemDto.category());
-        newItem.setSpaces(itemDto.spaces());
-        newItem.setCharacter(character);
-
-        return itemsRepository.save(newItem);
-    }
-
-    public List<Item> findAllItemsByCharacter(UUID characterId, UUID userId) {
-        Character character = findCharacterByIdAndUser(characterId, userId);
-        return character.getInventory();
-    }
-
-    public Item updateItemForCharacter(UUID characterId, UUID itemId, UUID userId, ItemRequestDTO itemDto) {
-        findCharacterByIdAndUser(characterId, userId);
-
-        Item itemToUpdate = itemsRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
-
-        if (!itemToUpdate.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Item does not belong to the specified character.");
-        }
-
-        itemToUpdate.setName(itemDto.name());
-        itemToUpdate.setDescription(itemDto.description());
-        itemToUpdate.setCategory(itemDto.category());
-        itemToUpdate.setSpaces(itemDto.spaces());
-
-        return itemsRepository.save(itemToUpdate);
-    }
-
-    public void deleteItemForCharacter(UUID characterId, UUID itemId, UUID userId) {
-        findCharacterByIdAndUser(characterId, userId);
-
-        Item itemToDelete = itemsRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
-
-        if (!itemToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Item does not belong to the specified character.");
-        }
-
-        itemsRepository.delete(itemToDelete);
+        return charactersRepository.save(character);
     }
 }

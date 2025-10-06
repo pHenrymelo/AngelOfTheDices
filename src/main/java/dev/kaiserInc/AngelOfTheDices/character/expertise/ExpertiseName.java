@@ -1,7 +1,5 @@
 package dev.kaiserInc.AngelOfTheDices.character.expertise;
 
-import java.util.List;
-
 public enum ExpertiseName {
 
     ACROBATICS("Acrobacia", Attribute.AGI, true, false, false),

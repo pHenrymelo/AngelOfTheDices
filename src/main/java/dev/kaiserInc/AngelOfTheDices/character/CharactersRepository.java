@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface CharacterRepository extends JpaRepository<Character, UUID> {
+public interface CharactersRepository extends JpaRepository<Character, UUID> {
     List<Character> findByUserId(UUID userId);
 }
