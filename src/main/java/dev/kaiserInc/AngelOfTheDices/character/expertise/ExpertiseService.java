@@ -3,7 +3,7 @@ package dev.kaiserInc.AngelOfTheDices.character.expertise;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharactersRepository;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
-import dev.kaiserInc.AngelOfTheDices.character.dto.SetExpertiseRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.dto.SetExpertiseRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,8 @@ public class ExpertiseService {
         this.charactersRepository = charactersRepository;
     }
 
-    public dev.kaiserInc.AngelOfTheDices.character.Character setExpertise(UUID characterId, UUID userId, SetExpertiseRequestDTO dto) {
-        dev.kaiserInc.AngelOfTheDices.character.Character character = characterService.findCharacterByIdAndUser(characterId, userId);
+    public Character setExpertise(UUID characterId, UUID userId, SetExpertiseRequestDTO dto) {
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
         CharacterExpertise expertiseToUpdate = character.getExpertises().stream()
                 .filter(exp -> exp.getExpertiseName().equals(dto.expertiseName()))
@@ -45,7 +45,7 @@ public class ExpertiseService {
     }
 
     public Set<CharacterExpertise> findAllExpertisesByCharacter(UUID characterId, UUID userId) {
-        dev.kaiserInc.AngelOfTheDices.character.Character character = characterService.findCharacterByIdAndUser(characterId, userId);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
         return character.getExpertises();
     }
 

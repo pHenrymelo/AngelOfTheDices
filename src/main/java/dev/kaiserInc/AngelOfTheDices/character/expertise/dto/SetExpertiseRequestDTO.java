@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.character.dto;
+package dev.kaiserInc.AngelOfTheDices.character.expertise.dto;
 
 import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.TrainingRank;

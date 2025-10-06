@@ -1,6 +1,5 @@
 package dev.kaiserInc.AngelOfTheDices.character.dto;
 
-
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 
@@ -43,5 +42,4 @@ public class CharacterMapper {
                 character.getAttacks()
         );
     }
-
 }

@@ -3,7 +3,7 @@ package dev.kaiserInc.AngelOfTheDices.character.expertise;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterMapper;
 import dev.kaiserInc.AngelOfTheDices.character.dto.CharacterResponseDTO;
-import dev.kaiserInc.AngelOfTheDices.character.dto.SetExpertiseRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.dto.SetExpertiseRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
