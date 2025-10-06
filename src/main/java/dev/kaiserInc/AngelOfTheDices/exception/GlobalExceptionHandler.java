@@ -3,7 +3,7 @@ package dev.kaiserInc.AngelOfTheDices.exception;
 import dev.kaiserInc.AngelOfTheDices.exception.dto.ErrorResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.DataConflictException;
-import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -65,8 +65,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ForbidenAccessException.class)
-    public ResponseEntity<ErrorResponseDTO> handleForbiddenAccess(ForbidenAccessException ex, HttpServletRequest request) {
+    @ExceptionHandler(ForbiddenAccessException.class)
+    public ResponseEntity<ErrorResponseDTO> handleForbiddenAccess(ForbiddenAccessException ex, HttpServletRequest request) {
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 Instant.now(),
                 HttpStatus.FORBIDDEN.value(),

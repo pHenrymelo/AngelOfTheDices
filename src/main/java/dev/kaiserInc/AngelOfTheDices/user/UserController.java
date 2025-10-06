@@ -3,12 +3,15 @@ package dev.kaiserInc.AngelOfTheDices.user;
 import dev.kaiserInc.AngelOfTheDices.user.dto.UserCreateRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.user.dto.UserMapper;
 import dev.kaiserInc.AngelOfTheDices.user.dto.UserResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.user.dto.UserUpdateRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -37,6 +40,19 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getMyProfile(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok(UserMapper.toResponseDTO(user));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateUserProfile(
+            @Valid @RequestBody UserUpdateRequestDTO requestDTO,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        User updatedUser = userService.updateUser(userId, requestDTO);
+
+        return ResponseEntity.ok(UserMapper.toResponseDTO(updatedUser));
     }
 
 }

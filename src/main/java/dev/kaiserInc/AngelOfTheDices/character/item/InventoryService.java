@@ -3,7 +3,7 @@ package dev.kaiserInc.AngelOfTheDices.character.item;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemMapper;
-import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +45,10 @@ public class InventoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
 
         if (!itemToUpdate.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Item does not belong to the specified character.");
+            throw new ForbiddenAccessException("Item does not belong to the specified character.");
         }
 
-        ItemMapper.updateFromDTO(itemDto, itemToUpdate);
+        ItemMapper.updateEntityFromDTO(itemDto, itemToUpdate);
 
         return itemsRepository.save(itemToUpdate);
     }
@@ -60,7 +60,7 @@ public class InventoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
 
         if (!itemToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Item does not belong to the specified character.");
+            throw new ForbiddenAccessException("Item does not belong to the specified character.");
         }
 
         itemsRepository.delete(itemToDelete);

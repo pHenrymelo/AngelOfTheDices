@@ -1,11 +1,11 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack;
 
-
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackMapper;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
-import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,15 +38,22 @@ public class AttackService {
         return character.getAttacks();
     }
 
+    public Attack findAttackById(UUID characterId, UUID attackId, UUID userId) {
+        characterService.findCharacterByIdAndUser(characterId, userId);
+
+        return attacksRepository.findById(attackId)
+                .orElseThrow(() -> new ResourceNotFoundException("Attack not found."));
+    }
+
     public Attack updateAttackForCharacter(UUID characterId, UUID attackId, UUID userId, AttackRequestDTO attackDto) {
         characterService.findCharacterByIdAndUser(characterId, userId);
         Attack attackToUpdate = attacksRepository.findById(attackId)
-                        .orElseThrow(() -> new ForbidenAccessException("Attack not found."));
+                        .orElseThrow(() -> new ForbiddenAccessException("Attack not found."));
         if (!attackToUpdate.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Attack does not belong to the specified character.");
+            throw new ForbiddenAccessException("Attack does not belong to the specified character.");
         }
 
-        AttackMapper.updateFromDTO(attackDto, attackToUpdate);
+        AttackMapper.updateEntityFromDTO(attackDto, attackToUpdate);
 
         return attacksRepository.save(attackToUpdate);
     }
@@ -54,9 +61,9 @@ public class AttackService {
     public void deleteAttackForCharacter(UUID characterId, UUID attackId, UUID userId) {
         characterService.findCharacterByIdAndUser(characterId, userId);
         Attack attackToDelete = attacksRepository.findById(attackId)
-                .orElseThrow(() -> new ForbidenAccessException("Attack not found."));
+                .orElseThrow(() -> new ForbiddenAccessException("Attack not found."));
         if (!attackToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbidenAccessException("Attack does not belong to the specified character.");
+            throw new ForbiddenAccessException("Attack does not belong to the specified character.");
         }
         attacksRepository.delete(attackToDelete);
     }

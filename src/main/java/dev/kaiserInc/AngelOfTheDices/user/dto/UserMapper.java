@@ -12,6 +12,10 @@ public class UserMapper {
         return user;
     }
 
+    public static void updateEntityFromDTO(UserUpdateRequestDTO requestDTO, User user) {
+        user.setName(requestDTO.name());
+    }
+
     public static UserResponseDTO toResponseDTO(User user) {
         return new UserResponseDTO(
                 user.getId(),

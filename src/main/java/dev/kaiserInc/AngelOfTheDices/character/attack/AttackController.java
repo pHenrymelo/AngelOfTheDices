@@ -1,5 +1,8 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack;
 
+import dev.kaiserInc.AngelOfTheDices.character.ability.Ability;
+import dev.kaiserInc.AngelOfTheDices.character.ability.dto.AbilityMapper;
+import dev.kaiserInc.AngelOfTheDices.character.ability.dto.AbilityResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackMapper;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackResponseDTO;
@@ -49,6 +52,22 @@ public class AttackController {
         List<Attack> attacks = attackService.findAllAttacksByCharacter(characterId, userId);
         List<AttackResponseDTO> dtos = attacks.stream().map(AttackMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{attackId}")
+    public ResponseEntity<AttackResponseDTO> getAttackById(
+            @PathVariable UUID characterId,
+            @PathVariable UUID attackId,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        UUID userId = userPrincipal.getId();
+
+        Attack attack = attackService.findAttackById(characterId, attackId, userId);
+
+        AttackResponseDTO responseDto = AttackMapper.toResponseDTO(attack);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{attackId}")

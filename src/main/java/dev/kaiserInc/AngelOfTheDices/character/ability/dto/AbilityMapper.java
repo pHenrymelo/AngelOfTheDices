@@ -13,6 +13,12 @@ public final class AbilityMapper {
         return ability;
     }
 
+    public static void updateEntityFromDTO(AbilityRequestDTO dto, Ability ability) {
+        ability.setName(dto.name());
+        ability.setDescription(dto.description());
+        ability.setType(dto.type());
+    }
+
     public static AbilityResponseDTO toResponseDTO(Ability ability) {
         return new AbilityResponseDTO(
                 ability.getId(),

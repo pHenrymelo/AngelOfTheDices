@@ -2,7 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
-import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
+import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import dev.kaiserInc.AngelOfTheDices.storage.FileStorageService;
 import dev.kaiserInc.AngelOfTheDices.user.User;
@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -72,7 +71,7 @@ public class CharacterService {
                 .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
 
         if (!character.getUser().getId().equals(userId)) {
-            throw new ForbidenAccessException("Permission denied");
+            throw new ForbiddenAccessException("Permission denied");
         }
 
         return character;
@@ -131,8 +130,6 @@ public class CharacterService {
         Character characterToDelete = this.findCharacterByIdAndUser(characterId, userId);
         charactersRepository.delete(characterToDelete);
     }
-
-
 
     public Character setCharacterPortrait(UUID characterId, UUID userId, MultipartFile file) {
         Character character = findCharacterByIdAndUser(characterId, userId);

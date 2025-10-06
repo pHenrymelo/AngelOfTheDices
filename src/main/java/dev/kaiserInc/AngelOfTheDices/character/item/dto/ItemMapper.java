@@ -16,13 +16,11 @@ public final class ItemMapper {
         return item;
     }
 
-    public static Item updateFromDTO(ItemRequestDTO dto, Item item) {
+    public static void updateEntityFromDTO(ItemRequestDTO dto, Item item) {
         item.setName(dto.name());
         item.setDescription(dto.description());
         item.setCategory(dto.category());
         item.setSpaces(dto.spaces());
-
-        return item;
     }
 
     public static ItemResponseDTO toResponseDTO(Item item) {

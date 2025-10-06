@@ -1,7 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack.dto;
 
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
-import dev.kaiserInc.AngelOfTheDices.character.attack.AttackController;
 
 public final class AttackMapper {
 
@@ -24,7 +23,7 @@ public final class AttackMapper {
         return attack;
     }
 
-    public static Attack updateFromDTO(AttackRequestDTO dto, Attack attack) {
+    public static void updateEntityFromDTO(AttackRequestDTO dto, Attack attack) {
         attack.setName(dto.name());
         attack.setType(dto.type());
         attack.setTestAttribute(dto.testAttribute());
@@ -37,7 +36,6 @@ public final class AttackMapper {
         attack.setCriticalMultiplier(dto.criticalMultiplier());
         attack.setRange(dto.range());
         attack.setSpecial(dto.special());
-        return attack;
     }
 
     public static AttackResponseDTO toResponseDTO(Attack attack) {
