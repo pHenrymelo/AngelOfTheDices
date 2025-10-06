@@ -26,7 +26,7 @@ public enum ExpertiseName {
     PROFESSION("Profissão", Attribute.INT, false, true, false),
     REACTION("Reflexos", Attribute.AGI, false, false, false),
     FAITH("Religião", Attribute.PRE, false, true, false),
-    SURVIVALISM("Sobrevivencia", Attribute.INT, false, false, false),
+    SURVIVALISM("Sobrevivência", Attribute.INT, false, false, false),
     TACTIC("Tática", Attribute.INT, false, true, false),
     TECHNOLOGY("Tecnologia", Attribute.INT, false, true, true),
     WILL("Vontade", Attribute.PRE, false, false, false);
