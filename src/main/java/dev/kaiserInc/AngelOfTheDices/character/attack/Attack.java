@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.attack;
+package dev.kaiserInc.AngelOfTheDices.character.attack;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.kaiserInc.AngelOfTheDices.character.Character;

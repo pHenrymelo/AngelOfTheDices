@@ -1,7 +1,7 @@
-package dev.kaiserInc.AngelOfTheDices.item;
+package dev.kaiserInc.AngelOfTheDices.character.item;
 
-import dev.kaiserInc.AngelOfTheDices.item.dto.ItemRequestDTO;
-import dev.kaiserInc.AngelOfTheDices.item.dto.ItemResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

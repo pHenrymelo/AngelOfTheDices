@@ -2,7 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.dto;
 
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
-import dev.kaiserInc.AngelOfTheDices.item.Item;
+import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 
 import java.util.Map;
 

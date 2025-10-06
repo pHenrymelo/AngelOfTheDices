@@ -1,8 +1,8 @@
-package dev.kaiserInc.AngelOfTheDices.attack.dto;
+package dev.kaiserInc.AngelOfTheDices.character.attack.dto;
 
-import dev.kaiserInc.AngelOfTheDices.attack.AttackType;
-import dev.kaiserInc.AngelOfTheDices.attack.DiceType;
-import dev.kaiserInc.AngelOfTheDices.attack.RangeType;
+import dev.kaiserInc.AngelOfTheDices.character.attack.AttackType;
+import dev.kaiserInc.AngelOfTheDices.character.attack.DiceType;
+import dev.kaiserInc.AngelOfTheDices.character.attack.RangeType;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.Attribute;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 

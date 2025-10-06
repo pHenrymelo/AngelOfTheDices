@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.item.dto;
+package dev.kaiserInc.AngelOfTheDices.character.item.dto;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.item;
+package dev.kaiserInc.AngelOfTheDices.character.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

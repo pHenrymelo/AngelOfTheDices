@@ -6,8 +6,8 @@ import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
-import dev.kaiserInc.AngelOfTheDices.item.Item;
-import dev.kaiserInc.AngelOfTheDices.attack.Attack;
+import dev.kaiserInc.AngelOfTheDices.character.item.Item;
+import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
 
 import java.util.List;
 import java.util.Map;

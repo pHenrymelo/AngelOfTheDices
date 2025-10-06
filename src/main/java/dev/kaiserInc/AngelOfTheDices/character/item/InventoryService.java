@@ -1,10 +1,10 @@
-package dev.kaiserInc.AngelOfTheDices.item;
+package dev.kaiserInc.AngelOfTheDices.character.item;
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
-import dev.kaiserInc.AngelOfTheDices.item.dto.ItemRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
