@@ -10,6 +10,27 @@ services:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - angel-network
+
+  app:
+    build:
+      context: .
+    container_name: angel-of-the-dices-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aotd_db
+    networks:
+      - angel-network
 
 volumes:
   pgdata:
+
+networks:
+  angel-network:
+    driver: bridge

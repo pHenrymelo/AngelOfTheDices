@@ -1,0 +1,19 @@
+# Arquivos do Git
+.git
+.gitignore
+
+# Arquivos de IDE
+.idea/
+*.iml
+
+# Pasta de build do Maven (é gerada dentro do contêiner)
+target/
+
+# Arquivos de log
+*.log
+
+# Pasta de uploads de usuário
+uploads/
+
+# Arquivos de variáveis de ambiente locais
+.env
