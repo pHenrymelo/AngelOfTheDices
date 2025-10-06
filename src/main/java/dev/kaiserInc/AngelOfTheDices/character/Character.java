@@ -4,6 +4,7 @@ import dev.kaiserInc.AngelOfTheDices.character.ability.Ability;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
+import dev.kaiserInc.AngelOfTheDices.character.note.Note;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
@@ -87,6 +88,9 @@ public class Character {
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Ability> abilities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Note> notes = new ArrayList<>();
 
     public int getMaxLoad() {
         if (this.strength == null || this.strength <= 0) {

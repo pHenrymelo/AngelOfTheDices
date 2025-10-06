@@ -8,6 +8,8 @@ import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemMapper;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteMapper;
+import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualMapper;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualResponseDTO;
 
@@ -116,6 +118,10 @@ public final class CharacterMapper {
                 .map(RitualMapper::toResponseDTO)
                 .collect(Collectors.toList());
 
+        List<NoteResponseDTO> noteDtos = character.getNotes().stream()
+                .map(NoteMapper::toResponseDTO)
+                .collect(Collectors.toList());
+
         return new CharacterResponseDTO(
                 // Bloco 1: IDs e Nomes
                 character.getId(),
@@ -160,7 +166,8 @@ public final class CharacterMapper {
                 inventoryDtos,
                 attackDtos,
                 abilityDtos,
-                ritualDtos
+                ritualDtos,
+                noteDtos
         );
     }
 }

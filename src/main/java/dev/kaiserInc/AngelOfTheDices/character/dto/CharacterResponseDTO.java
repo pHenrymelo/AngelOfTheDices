@@ -8,6 +8,7 @@ import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
@@ -53,5 +54,6 @@ public record CharacterResponseDTO(
         List<ItemResponseDTO> inventory,
         List<AttackResponseDTO> attacks,
         List<AbilityResponseDTO> abilities,
-        List<RitualResponseDTO> rituals
+        List<RitualResponseDTO> rituals,
+        List<NoteResponseDTO> notes
 ) {}
