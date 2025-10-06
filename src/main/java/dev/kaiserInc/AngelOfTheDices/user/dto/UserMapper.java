@@ -1,7 +1,6 @@
-package dev.kaiserInc.AngelOfTheDices.user;
+package dev.kaiserInc.AngelOfTheDices.user.dto;
 
-import dev.kaiserInc.AngelOfTheDices.user.dto.UserCreateRequestDTO;
-import dev.kaiserInc.AngelOfTheDices.user.dto.UserResponseDTO;
+import dev.kaiserInc.AngelOfTheDices.user.User;
 
 public class UserMapper {
 

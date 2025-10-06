@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.character.attack;
+package dev.kaiserInc.AngelOfTheDices.character.ritual;
 
 public enum RangeType {
     PERSONAL,
@@ -6,5 +6,6 @@ public enum RangeType {
     SHORT,
     MEDIUM,
     LONG,
-    EXTREME
+    EXTREME,
+    UNLIMITED
 }

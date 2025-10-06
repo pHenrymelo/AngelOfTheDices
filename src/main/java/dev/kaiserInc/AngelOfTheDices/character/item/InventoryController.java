@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character.item;
 
+import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemMapper;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
@@ -23,16 +24,6 @@ public class InventoryController {
         this.inventoryService = inventoryService;
     }
 
-
-    private ItemResponseDTO toItemResponseDTO(Item item) {
-        return new ItemResponseDTO(
-                item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getCategory(),
-                item.getSpaces());
-    }
-
     @PostMapping
     public ResponseEntity<ItemResponseDTO> addItemToInventory(
             @PathVariable UUID characterId,
@@ -42,7 +33,7 @@ public class InventoryController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
         Item newItem = inventoryService.createItemForCharacter(characterId, userId, requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(toItemResponseDTO(newItem));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ItemMapper.toResponseDTO(newItem));
     }
 
     @GetMapping
@@ -54,7 +45,7 @@ public class InventoryController {
         UUID userId = userPrincipal.getId();
 
         List<Item> items = inventoryService.findAllItemsByCharacter(characterId, userId);
-        List<ItemResponseDTO> dtos = items.stream().map(this::toItemResponseDTO).collect(Collectors.toList());
+        List<ItemResponseDTO> dtos = items.stream().map(ItemMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
@@ -68,7 +59,7 @@ public class InventoryController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
         Item updatedItem = inventoryService.updateItemForCharacter(characterId, itemId, userId, requestDTO);
-        return ResponseEntity.ok(toItemResponseDTO(updatedItem));
+        return ResponseEntity.ok(ItemMapper.toResponseDTO(updatedItem));
     }
 
     @DeleteMapping("/{itemId}")

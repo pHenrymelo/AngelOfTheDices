@@ -2,6 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.item;
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
+import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemMapper;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbidenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemRequestDTO;
@@ -26,11 +27,7 @@ public class InventoryService {
     public Item createItemForCharacter(UUID characterId, UUID userId, ItemRequestDTO itemDto) {
         Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
-        Item newItem = new Item();
-        newItem.setName(itemDto.name());
-        newItem.setDescription(itemDto.description());
-        newItem.setCategory(itemDto.category());
-        newItem.setSpaces(itemDto.spaces());
+        Item newItem = ItemMapper.toEntity(itemDto);
         newItem.setCharacter(character);
 
         return itemsRepository.save(newItem);
@@ -51,10 +48,7 @@ public class InventoryService {
             throw new ForbidenAccessException("Item does not belong to the specified character.");
         }
 
-        itemToUpdate.setName(itemDto.name());
-        itemToUpdate.setDescription(itemDto.description());
-        itemToUpdate.setCategory(itemDto.category());
-        itemToUpdate.setSpaces(itemDto.spaces());
+        ItemMapper.updateFromDTO(itemDto, itemToUpdate);
 
         return itemsRepository.save(itemToUpdate);
     }

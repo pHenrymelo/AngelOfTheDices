@@ -1,6 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.user;
 
 import dev.kaiserInc.AngelOfTheDices.user.dto.UserCreateRequestDTO;
+import dev.kaiserInc.AngelOfTheDices.user.dto.UserMapper;
 import dev.kaiserInc.AngelOfTheDices.user.dto.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

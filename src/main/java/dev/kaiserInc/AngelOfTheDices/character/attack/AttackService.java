@@ -1,6 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack;
 
 
+import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackMapper;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
@@ -25,9 +26,10 @@ public class AttackService {
 
     public Attack createAttackForCharacter(UUID characterId, UUID userId, AttackRequestDTO attackDto) {
         Character character = characterService.findCharacterByIdAndUser(characterId, userId);
-        Attack newAttack = new Attack();
-        mapDtoToEntity(attackDto, newAttack);
+
+        Attack newAttack = AttackMapper.toEntity(attackDto);
         newAttack.setCharacter(character);
+
         return attacksRepository.save(newAttack);
     }
 
@@ -43,7 +45,9 @@ public class AttackService {
         if (!attackToUpdate.getCharacter().getId().equals(characterId)) {
             throw new ForbidenAccessException("Attack does not belong to the specified character.");
         }
-        mapDtoToEntity(attackDto, attackToUpdate);
+
+        AttackMapper.updateFromDTO(attackDto, attackToUpdate);
+
         return attacksRepository.save(attackToUpdate);
     }
 
@@ -55,21 +59,5 @@ public class AttackService {
             throw new ForbidenAccessException("Attack does not belong to the specified character.");
         }
         attacksRepository.delete(attackToDelete);
-    }
-
-
-    private void mapDtoToEntity(AttackRequestDTO dto, Attack attack) {
-        attack.setName(dto.name());
-        attack.setType(dto.type());
-        attack.setTestAttribute(dto.testAttribute());
-        attack.setTestExpertise(dto.testExpertise());
-        attack.setTestBonus(dto.testBonus() != null ? dto.testBonus() : 0);
-        attack.setDamageDiceQuantity(dto.damageDiceQuantity());
-        attack.setDamageDiceType(dto.damageDiceType());
-        attack.setDamageBonus(dto.damageBonus() != null ? dto.damageBonus() : 0);
-        attack.setCriticalThreshold(dto.criticalThreshold());
-        attack.setCriticalMultiplier(dto.criticalMultiplier());
-        attack.setRange(dto.range());
-        attack.setSpecial(dto.special());
     }
 }

@@ -1,11 +1,13 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
+import dev.kaiserInc.AngelOfTheDices.character.ability.Ability;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
+import dev.kaiserInc.AngelOfTheDices.character.ritual.Ritual;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -73,6 +75,12 @@ public class Character {
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Attack> attacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Ritual> rituals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Ability> abilities = new ArrayList<>();
 
     public int getMaxLoad() {
         if (this.strength == null || this.strength <= 0) {

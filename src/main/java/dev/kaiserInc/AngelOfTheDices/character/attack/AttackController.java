@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack;
 
+import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackMapper;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
@@ -34,7 +35,7 @@ public class AttackController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
         Attack newAttack = attackService.createAttackForCharacter(characterId, userId, requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(toAttackResponseDTO(newAttack));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AttackMapper.toResponseDTO(newAttack));
     }
 
     @GetMapping
@@ -46,7 +47,7 @@ public class AttackController {
         UUID userId = userPrincipal.getId();
 
         List<Attack> attacks = attackService.findAllAttacksByCharacter(characterId, userId);
-        List<AttackResponseDTO> dtos = attacks.stream().map(this::toAttackResponseDTO).collect(Collectors.toList());
+        List<AttackResponseDTO> dtos = attacks.stream().map(AttackMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
@@ -61,7 +62,7 @@ public class AttackController {
         UUID userId = userPrincipal.getId();
 
         Attack updatedAttack = attackService.updateAttackForCharacter(characterId, attackId, userId, requestDTO);
-        return ResponseEntity.ok(toAttackResponseDTO(updatedAttack));
+        return ResponseEntity.ok(AttackMapper.toResponseDTO(updatedAttack));
     }
 
     @DeleteMapping("/{attackId}")
@@ -76,20 +77,4 @@ public class AttackController {
         return ResponseEntity.noContent().build();
     }
 
-    private AttackResponseDTO toAttackResponseDTO(Attack attack) {
-        return new AttackResponseDTO(
-                attack.getId(),
-                attack.getName(),
-                attack.getType(),
-                attack.getTestAttribute(),
-                attack.getTestExpertise(),
-                attack.getTestBonus(),
-                attack.getDamageDiceQuantity(),
-                attack.getDamageDiceType(),
-                attack.getDamageBonus(),
-                attack.getCriticalThreshold(),
-                attack.getCriticalMultiplier(),
-                attack.getRange(),
-                attack.getSpecial());
-    }
 }
