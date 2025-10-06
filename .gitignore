@@ -37,3 +37,6 @@ build/
 
 # Upload files
 /uploads/
+
+# Environment
+.env
