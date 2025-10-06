@@ -4,14 +4,14 @@ import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
+import dev.kaiserInc.AngelOfTheDices.item.Item;
+import dev.kaiserInc.AngelOfTheDices.attack.Attack;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "characters")
@@ -23,29 +23,10 @@ public class Character {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String portraitURL;
-
     @Column(nullable = false)
     private String name;
     private Integer nex;
-
-    private Integer strength;
-    private Integer agility;
-    private Integer intellect;
-    private Integer presence;
-    private Integer vigor;
-
-    private Integer MaxHitPoints;
-    private Integer CurrentHitPoints;
-
-    private Integer MaxEffortPoints;
-    private Integer CurrentEffortPoints;
-
-    private Integer MaxSanity;
-    private Integer CurrentSanity;
-
-    private String rank;
-    private Integer prestigePoints;
+    private String portraitUrl;
 
     @Enumerated(EnumType.STRING)
     private CharacterClass characterClass;
@@ -59,6 +40,26 @@ public class Character {
     @Enumerated(EnumType.STRING)
     private Origin origin;
 
+    @Enumerated(EnumType.STRING)
+    private Rank rank;
+
+    private Integer strength;
+    private Integer agility;
+    private Integer intellect;
+    private Integer presence;
+    private Integer vigor;
+
+    private Integer maxHitPoints;
+    private Integer currentHitPoints;
+
+    private Integer maxEffortPoints;
+    private Integer currentEffortPoints;
+
+    private Integer maxSanity;
+    private Integer currentSanity;
+
+    private Integer prestigePoints;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -66,6 +67,19 @@ public class Character {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "character_expertises", joinColumns = @JoinColumn(name = "character_id"))
     private Set<CharacterExpertise> expertises = new HashSet<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Item> inventory = new ArrayList<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Attack> attacks = new ArrayList<>();
+
+    public int getMaxLoad() {
+        if (this.strength == null || this.strength <= 0) {
+            return 2;
+        }
+        return this.strength * 5;
+    }
 
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/characters")
@@ -58,7 +57,7 @@ public class CharacterController {
         User user = (User) authentication.getPrincipal();
         UUID userId = user.getId();
 
-        Character character = characterService.findByIdAndUser(characterId, userId);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
         return ResponseEntity.ok(CharacterMapper.toResponseDTO(character));
     }
