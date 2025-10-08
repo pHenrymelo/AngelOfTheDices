@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class RitualController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Ritual> rituals = ritualService.findAllRitualsByCharacter(characterId, userId);
+        Set<Ritual> rituals = ritualService.findAllRitualsByCharacter(characterId, userId);
         List<RitualResponseDTO> dtos = rituals.stream().map(RitualMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }

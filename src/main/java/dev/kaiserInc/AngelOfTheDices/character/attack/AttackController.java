@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class AttackController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Attack> attacks = attackService.findAllAttacksByCharacter(characterId, userId);
+        Set<Attack> attacks = attackService.findAllAttacksByCharacter(characterId, userId);
         List<AttackResponseDTO> dtos = attacks.stream().map(AttackMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }

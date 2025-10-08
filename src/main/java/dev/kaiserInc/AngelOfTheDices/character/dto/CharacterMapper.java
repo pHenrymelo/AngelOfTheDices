@@ -123,17 +123,12 @@ public final class CharacterMapper {
                 .collect(Collectors.toList());
 
         return new CharacterResponseDTO(
-                // Bloco 1: IDs e Nomes
                 character.getId(),
                 character.getName(),
                 playerName,
-
-                // Bloco 2: Detalhes Pessoais
                 character.getAge(),
                 character.getGender(),
                 character.getPortraitUrl(),
-
-                // Bloco 3: Dados de Jogo Principais
                 character.getNex(),
                 character.getPrestigePoints(),
                 character.getOrigin(),
@@ -141,27 +136,16 @@ public final class CharacterMapper {
                 character.getPath(),
                 character.getAffinity(),
                 character.getRank(),
-
-                // Bloco 4: Atributos
-                character.getStrength(), character.getAgility(), character.getIntellect(),
-                character.getPresence(), character.getVigor(),
-
-                // Bloco 5: Status
+                character.getStrength(), character.getAgility(), character.getIntellect(), character.getPresence(), character.getVigor(),
                 character.getMaxHitPoints(), character.getCurrentHitPoints(),
                 character.getMaxEffortPoints(), character.getCurrentEffortPoints(),
                 character.getMaxSanity(), character.getCurrentSanity(),
-
-                // Bloco 6: Dados Calculados
-                maxLoad,
-                currentLoad,
                 pePerRound,
                 movement,
                 defense,
-
-                // Bloco 7: Outros Dados
+                maxLoad,
+                currentLoad,
                 itemLimits,
-
-                // Bloco 8: Coleções
                 character.getExpertises(),
                 inventoryDtos,
                 attackDtos,

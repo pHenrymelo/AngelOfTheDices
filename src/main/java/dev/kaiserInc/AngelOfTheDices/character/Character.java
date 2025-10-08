@@ -78,19 +78,19 @@ public class Character {
     private Set<CharacterExpertise> expertises = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Item> inventory = new ArrayList<>();
+    private Set<Item> inventory = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Attack> attacks = new ArrayList<>();
+    private Set<Attack> attacks = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Ritual> rituals = new ArrayList<>();
+    private Set<Ritual> rituals = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Ability> abilities = new ArrayList<>();
+    private Set<Ability> abilities = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Note> notes = new ArrayList<>();
+    private Set<Note> notes = new HashSet<>();
 
     public int getMaxLoad() {
         if (this.strength == null || this.strength <= 0) {

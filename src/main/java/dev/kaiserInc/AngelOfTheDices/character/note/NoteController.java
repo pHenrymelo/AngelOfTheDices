@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class NoteController {
     @GetMapping
     public ResponseEntity<List<NoteResponseDTO>> getNotes(@PathVariable UUID characterId, Authentication authentication) {
         User userPrincipal = (User) authentication.getPrincipal();
-        List<Note> notes = noteService.findAllNotesByCharacter(characterId, userPrincipal.getId());
+        Set<Note> notes = noteService.findAllNotesByCharacter(characterId, userPrincipal.getId());
         List<NoteResponseDTO> dtos = notes.stream().map(NoteMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }

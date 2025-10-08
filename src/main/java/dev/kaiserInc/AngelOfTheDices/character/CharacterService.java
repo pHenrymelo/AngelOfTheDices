@@ -48,7 +48,7 @@ public class CharacterService {
     }
 
     public Character findCharacterByIdAndUser(UUID id, UUID userId) {
-        Character character = charactersRepository.findById(id)
+        Character character = charactersRepository.findByIdWithAllDetails(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Character not found"));
 
         if (!character.getUser().getId().equals(userId)) {

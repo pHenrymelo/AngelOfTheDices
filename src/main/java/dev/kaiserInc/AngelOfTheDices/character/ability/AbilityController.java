@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class AbilityController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Ability> abilities = abilityService.findAllAbilitiesByCharacter(characterId, userId);
+        Set<Ability> abilities = abilityService.findAllAbilitiesByCharacter(characterId, userId);
         List<AbilityResponseDTO> dtos = abilities.stream().map(AbilityMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }

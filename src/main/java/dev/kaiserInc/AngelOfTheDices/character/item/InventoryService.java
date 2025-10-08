@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,7 +34,7 @@ public class InventoryService {
         return itemsRepository.save(newItem);
     }
 
-    public List<Item> findAllItemsByCharacter(UUID characterId, UUID userId) {
+    public Set<Item> findAllItemsByCharacter(UUID characterId, UUID userId) {
         Character character = characterService.findCharacterByIdAndUser(characterId, userId);
         return character.getInventory();
     }

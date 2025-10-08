@@ -1,5 +1,10 @@
 package dev.kaiserInc.AngelOfTheDices.character.expertise;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+
+@Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum TrainingRank {
     UNTRAINED(0),
     TRAINED(5),
@@ -12,7 +17,7 @@ public enum TrainingRank {
         this.bonus = bonus;
     }
 
-    public int getBonus() {
-        return bonus;
+    public String getName() {
+        return this.name();
     }
 }

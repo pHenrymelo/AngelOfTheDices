@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public class InventoryController {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Item> items = inventoryService.findAllItemsByCharacter(characterId, userId);
+        Set<Item> items = inventoryService.findAllItemsByCharacter(characterId, userId);
         List<ItemResponseDTO> dtos = items.stream().map(ItemMapper::toResponseDTO).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
