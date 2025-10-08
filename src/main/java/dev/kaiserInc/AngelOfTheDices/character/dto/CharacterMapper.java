@@ -98,10 +98,6 @@ public final class CharacterMapper {
         int otherBonus = character.getOtherDefenseBonus() != null ? character.getOtherDefenseBonus() : 0;
         int defense = baseDefense + agilityBonus + armorBonus + otherBonus;
 
-        Map<Integer, Integer> itemLimits = character.getRank() != null
-                ? character.getRank().getItemLimits()
-                : Map.of();
-
         List<ItemResponseDTO> inventoryDtos = character.getInventory().stream()
                 .map(ItemMapper::toResponseDTO)
                 .collect(Collectors.toList());
@@ -145,7 +141,6 @@ public final class CharacterMapper {
                 defense,
                 maxLoad,
                 currentLoad,
-                itemLimits,
                 character.getExpertises(),
                 inventoryDtos,
                 attackDtos,
