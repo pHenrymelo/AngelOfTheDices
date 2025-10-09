@@ -14,7 +14,6 @@ import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualMapper;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualResponseDTO;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class CharacterMapper {
