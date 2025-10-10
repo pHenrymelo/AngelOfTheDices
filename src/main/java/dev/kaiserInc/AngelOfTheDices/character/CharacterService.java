@@ -8,6 +8,8 @@ import dev.kaiserInc.AngelOfTheDices.storage.FileStorageService;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import dev.kaiserInc.AngelOfTheDices.user.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,8 +45,8 @@ public class CharacterService {
         return charactersRepository.save(newCharacter);
     }
 
-    public List<Character> findAllByUser(UUID userId) {
-        return charactersRepository.findByUserId(userId);
+    public Page<Character> findAllByUser(UUID userId, Pageable pageable) {
+        return charactersRepository.findByUserId(userId, pageable);
     }
 
     public Character findCharacterByIdAndUser(UUID id, UUID userId) {
@@ -62,6 +64,16 @@ public class CharacterService {
         Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
 
         CharacterMapper.updateEntityFromDTO(characterData, characterToUpdate);
+
+        if (characterToUpdate.getCurrentHitPoints() > characterToUpdate.getMaxHitPoints()) {
+            characterToUpdate.setCurrentHitPoints(characterToUpdate.getMaxHitPoints());
+        }
+        if (characterToUpdate.getCurrentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
+            characterToUpdate.setCurrentEffortPoints(characterToUpdate.getMaxEffortPoints());
+        }
+        if (characterToUpdate.getCurrentSanity() > characterToUpdate.getMaxSanity()) {
+            characterToUpdate.setCurrentSanity(characterToUpdate.getMaxSanity());
+        }
 
         return charactersRepository.save(characterToUpdate);
     }

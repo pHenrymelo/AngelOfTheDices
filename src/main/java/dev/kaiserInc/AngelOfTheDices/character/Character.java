@@ -1,6 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
 import dev.kaiserInc.AngelOfTheDices.character.ability.Ability;
+import dev.kaiserInc.AngelOfTheDices.character.affinity.Affinity;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
 import dev.kaiserInc.AngelOfTheDices.character.expertise.CharacterExpertise;
@@ -8,6 +9,7 @@ import dev.kaiserInc.AngelOfTheDices.character.note.Note;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
+import dev.kaiserInc.AngelOfTheDices.character.rank.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.Ritual;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;

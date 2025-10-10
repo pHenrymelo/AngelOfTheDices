@@ -25,6 +25,8 @@ services:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aotd_db
+    volumes:
+      - ./uploads:/app/uploads
     networks:
       - angel-network
 

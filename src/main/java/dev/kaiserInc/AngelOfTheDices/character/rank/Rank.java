@@ -1,4 +1,4 @@
-package dev.kaiserInc.AngelOfTheDices.character;
+package dev.kaiserInc.AngelOfTheDices.character.rank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

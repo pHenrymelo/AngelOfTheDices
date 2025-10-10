@@ -1,7 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character.dto;
 
-import dev.kaiserInc.AngelOfTheDices.character.Affinity;
-import dev.kaiserInc.AngelOfTheDices.character.Rank;
+import dev.kaiserInc.AngelOfTheDices.character.affinity.Affinity;
+import dev.kaiserInc.AngelOfTheDices.character.rank.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
@@ -33,6 +33,6 @@ public record CharacterUpdateRequestDTO(
         @NotNull @Min(1) Integer maxEffortPoints,
         @NotNull @Min(1) Integer maxSanity,
 
-        @NotNull Integer armorDefenseBonus,
-        @NotNull Integer otherDefenseBonus
+        Integer armorDefenseBonus,
+        Integer otherDefenseBonus
 ) {}

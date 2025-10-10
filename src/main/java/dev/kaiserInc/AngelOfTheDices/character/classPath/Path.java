@@ -1,6 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character.classPath;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.kaiserInc.AngelOfTheDices.character.Sourcebook;
 import lombok.Getter;
 
@@ -59,6 +60,11 @@ public enum Path {
         this.displayName = displayName;
         this.characterClass = characterClass;
         this.source = source;
+    }
+
+    @JsonProperty("characterClass")
+    public String getCharacterClassName() {
+        return this.characterClass.name();
     }
 
     public String getName() {

@@ -4,6 +4,8 @@ import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,17 +35,15 @@ public class CharacterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CharacterResponseDTO>> getAllForUser(Authentication authentication) {
+    public ResponseEntity<Page<CharacterResponseDTO>> getAllForUser(Authentication authentication, Pageable pageable) {
         User userPrincipal = (User) authentication.getPrincipal();
         UUID userId = userPrincipal.getId();
 
-        List<Character> characters = characterService.findAllByUser(userId);
+        Page<Character> characterPage = characterService.findAllByUser(userId, pageable);
 
-        List<CharacterResponseDTO> responseDTOs = characters.stream()
-                .map(CharacterMapper::toResponseDTO)
-                .toList();
+        Page<CharacterResponseDTO> responseDTOPage = characterPage.map(CharacterMapper::toResponseDTO);
 
-        return ResponseEntity.ok(responseDTOs);
+        return ResponseEntity.ok(responseDTOPage);
     }
 
     @GetMapping("/{characterId}")

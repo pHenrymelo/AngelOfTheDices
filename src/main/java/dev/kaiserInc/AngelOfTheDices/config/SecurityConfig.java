@@ -44,7 +44,10 @@ public class SecurityConfig {
                                 "/expertises",
                                 "/origins",
                                 "/paths",
-                                "/classes"
+                                "/classes",
+                                "/affinities",
+                                "/ranks",
+                                "/portraits/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

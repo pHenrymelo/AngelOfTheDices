@@ -1,7 +1,7 @@
 package dev.kaiserInc.AngelOfTheDices.character.dto;
 
-import dev.kaiserInc.AngelOfTheDices.character.Affinity;
-import dev.kaiserInc.AngelOfTheDices.character.Rank;
+import dev.kaiserInc.AngelOfTheDices.character.affinity.Affinity;
+import dev.kaiserInc.AngelOfTheDices.character.rank.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
