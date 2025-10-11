@@ -45,7 +45,7 @@ public record CharacterResponseDTO(
         // Bloco 5: Dados Calculados
         Integer pePerRound,
         Integer movement,
-        Integer defense,
+        DefenseDTO defense,
         Integer maxLoad,
         Integer currentLoad,
 

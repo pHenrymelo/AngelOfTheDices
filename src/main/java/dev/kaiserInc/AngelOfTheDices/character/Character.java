@@ -15,7 +15,9 @@ import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.*;
 
 @Entity
@@ -27,6 +29,9 @@ public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @UpdateTimestamp
+    private Instant updatedAt;
 
     @Column(nullable = false)
     private String name;

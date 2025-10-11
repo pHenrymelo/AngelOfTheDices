@@ -8,31 +8,31 @@ import java.util.Map;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Rank {
-    RECRUIT("Recruta", Map.of(
+    RECRUIT("Recruta", 0, Map.of(
             1, 2,
             2, 0,
             3, 0,
             4, 0
     ), "Baixo"),
-    OPERATOR("Operador", Map.of(
+    OPERATOR("Operador", 20, Map.of(
             1, 3,
             2, 1,
             3, 0,
             4, 0
     ), "Medio"),
-    SPECIAL_AGENT("Agente Especial", Map.of(
+    SPECIAL_AGENT("Agente Especial",50, Map.of(
             1, 3,
             2, 2,
             3, 1,
             4, 0
     ), "Medio"),
-    OFFICIAL_OPS("Oficial de Operações", Map.of(
+    OFFICIAL_OPS("Oficial de Operações",100, Map.of(
             1, 3,
             2, 3,
             3, 2,
             4, 1
     ), "Alto"),
-    ELITE_AGENT("Agente de Elite", Map.of(
+    ELITE_AGENT("Agente de Elite",100, Map.of(
             1, 3,
             2, 3,
             3, 3,
@@ -40,11 +40,13 @@ public enum Rank {
     ), "Ilimitado");
 
     private final String displayName;
+    private final int minPrestige;
     private final Map<Integer, Integer> itemLimits;
     private final String creditLimit;
 
-    Rank(String displayName, Map<Integer, Integer> itemLimits, String creditLimit) {
+    Rank(String displayName, int minPrestige, Map<Integer, Integer> itemLimits, String creditLimit) {
         this.displayName = displayName;
+        this.minPrestige = minPrestige;
         this.itemLimits = itemLimits;
         this.creditLimit = creditLimit;
     }

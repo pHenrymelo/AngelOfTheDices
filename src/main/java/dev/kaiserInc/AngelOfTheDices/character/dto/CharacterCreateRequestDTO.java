@@ -29,10 +29,6 @@ public record CharacterCreateRequestDTO(
         @NotNull Integer presence,
         @NotNull Integer vigor,
 
-        @NotNull @Min(1) Integer maxHitPoints,
-        @NotNull @Min(1) Integer maxEffortPoints,
-        @NotNull @Min(1) Integer maxSanity,
-
         Integer armorDefenseBonus,
         Integer otherDefenseBonus
 ) {}

@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
+import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.dto.*;
 import dev.kaiserInc.AngelOfTheDices.exception.types.BusinessRuleException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
@@ -35,12 +36,38 @@ public class CharacterService {
         User user = usersRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Authenticated user nor found"));
 
+        if (dto.characterClass() == CharacterClass.SURVIVOR && dto.nex() != 0) {
+            throw new BusinessRuleException("A classe Sobrevivente só pode ser criada com NEX 0%.");
+        }
+
         if (dto.path().getCharacterClass() != dto.characterClass()) {
             throw new BusinessRuleException("The path '" +dto.path().getDisplayName() + "' is not valid for class '" + dto.characterClass().name() + "'.");
         }
 
         Character newCharacter = CharacterMapper.toEntity(dto);
         newCharacter.setUser(user);
+        int nex = dto.nex();
+        int level = Math.round(((float) nex / 5));
+
+        if (level < 1) {
+            level = 1;
+        }
+
+        CharacterClass selectedClass = dto.characterClass();
+
+        int maxHp = selectedClass.getBaseHitPoints() + ((level - 1) * selectedClass.getHpPerLevel()) + (level * dto.vigor());
+        int maxEp = selectedClass.getBaseEffortPoints() + ((level - 1) * selectedClass.getEpPerLevel()) + (level * dto.presence());
+        int maxSan = selectedClass.getBaseSanity() + ((level - 1) * selectedClass.getSanPerLevel());
+
+
+        newCharacter.setMaxHitPoints(maxHp);
+        newCharacter.setCurrentHitPoints(maxHp);
+
+        newCharacter.setMaxEffortPoints(maxEp);
+        newCharacter.setCurrentEffortPoints(maxEp);
+
+        newCharacter.setMaxSanity(maxSan);
+        newCharacter.setCurrentSanity(maxSan);
 
         return charactersRepository.save(newCharacter);
     }
@@ -60,10 +87,14 @@ public class CharacterService {
         return character;
     }
 
-    public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateRequestDTO characterData) {
+    public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateRequestDTO dto) {
         Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
 
-        CharacterMapper.updateEntityFromDTO(characterData, characterToUpdate);
+        if (dto.characterClass() == CharacterClass.SURVIVOR && dto.nex() != 0) {
+            throw new BusinessRuleException("A classe Sobrevivente só pode ter NEX 0%.");
+        }
+
+        CharacterMapper.updateEntityFromDTO(dto, characterToUpdate);
 
         if (characterToUpdate.getCurrentHitPoints() > characterToUpdate.getMaxHitPoints()) {
             characterToUpdate.setCurrentHitPoints(characterToUpdate.getMaxHitPoints());

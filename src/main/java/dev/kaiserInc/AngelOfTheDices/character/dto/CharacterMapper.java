@@ -35,14 +35,8 @@ public final class CharacterMapper {
         character.setIntellect(dto.intellect());
         character.setPresence(dto.presence());
         character.setVigor(dto.vigor());
-        character.setMaxHitPoints(dto.maxHitPoints());
-        character.setMaxEffortPoints(dto.maxEffortPoints());
-        character.setMaxSanity(dto.maxSanity());
         character.setRank(dto.rank());
         character.setPrestigePoints(dto.prestigePoints());
-        character.setCurrentHitPoints(dto.maxHitPoints());
-        character.setCurrentEffortPoints(dto.maxEffortPoints());
-        character.setCurrentSanity(dto.maxSanity());
         character.setArmorDefenseBonus(dto.armorDefenseBonus() != null ? dto.armorDefenseBonus() : 0);
         character.setOtherDefenseBonus(dto.otherDefenseBonus() != null ? dto.otherDefenseBonus() : 0);
         return character;
@@ -95,7 +89,9 @@ public final class CharacterMapper {
         int agilityBonus = character.getAgility() != null ? character.getAgility() : 0;
         int armorBonus = character.getArmorDefenseBonus() != null ? character.getArmorDefenseBonus() : 0;
         int otherBonus = character.getOtherDefenseBonus() != null ? character.getOtherDefenseBonus() : 0;
-        int defense = baseDefense + agilityBonus + armorBonus + otherBonus;
+        int totalDefense = baseDefense + agilityBonus + armorBonus + otherBonus;
+
+        DefenseDTO defenseDto = new DefenseDTO(totalDefense, baseDefense, agilityBonus, armorBonus, otherBonus);
 
         List<ItemResponseDTO> inventoryDtos = character.getInventory().stream()
                 .map(ItemMapper::toResponseDTO)
@@ -137,7 +133,7 @@ public final class CharacterMapper {
                 character.getMaxSanity(), character.getCurrentSanity(),
                 pePerRound,
                 movement,
-                defense,
+                defenseDto,
                 maxLoad,
                 currentLoad,
                 character.getExpertises(),
