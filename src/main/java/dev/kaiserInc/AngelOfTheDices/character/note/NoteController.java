@@ -2,6 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.note;
 
 
 import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteMapper;
+import dev.kaiserInc.AngelOfTheDices.character.note.dto.NotePinRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.note.dto.NoteResponseDTO;
 import dev.kaiserInc.AngelOfTheDices.user.User;
@@ -62,5 +63,17 @@ public class NoteController {
         User userPrincipal = (User) authentication.getPrincipal();
         noteService.deleteNoteForCharacter(characterId, noteId, userPrincipal.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{noteId}/pin")
+    public ResponseEntity<NoteResponseDTO> toggleNotePin(
+            @PathVariable UUID characterId,
+            @PathVariable UUID noteId,
+            @Valid @RequestBody NotePinRequestDTO dto,
+            Authentication authentication) {
+
+        User userPrincipal = (User) authentication.getPrincipal();
+        Note updatedNote = noteService.toggleNotePin(characterId, noteId, userPrincipal.getId(), dto.isPinned());
+        return ResponseEntity.ok(NoteMapper.toResponseDTO(updatedNote));
     }
 }

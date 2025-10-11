@@ -97,6 +97,7 @@ public class Character {
     private Set<Ability> abilities = new HashSet<>();
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy("isPinned DESC, createdAt DESC")
     private Set<Note> notes = new HashSet<>();
 
     public int getMaxLoad() {

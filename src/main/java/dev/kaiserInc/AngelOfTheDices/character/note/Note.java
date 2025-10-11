@@ -5,7 +5,9 @@ import dev.kaiserInc.AngelOfTheDices.character.Character;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -23,6 +25,11 @@ public class Note {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @CreationTimestamp
+    private Instant createdAt;
+
+    private boolean isPinned = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id", nullable = false)

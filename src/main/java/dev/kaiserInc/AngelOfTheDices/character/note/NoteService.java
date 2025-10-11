@@ -69,4 +69,10 @@ public class NoteService {
 
         charactersRepository.save(character);
     }
+
+    public Note toggleNotePin(UUID characterId, UUID noteId, UUID userId, boolean pinStatus) {
+        Note noteToUpdate = this.findNoteById(characterId, noteId, userId);
+        noteToUpdate.setPinned(pinStatus);
+        return notesRepository.save(noteToUpdate);
+    }
 }
