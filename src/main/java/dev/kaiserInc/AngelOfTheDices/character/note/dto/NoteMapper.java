@@ -18,6 +18,11 @@ public final class NoteMapper {
     }
 
     public static NoteResponseDTO toResponseDTO(Note note) {
-        return new NoteResponseDTO(note.getId(), note.getTitle(), note.getDescription());
+        return new NoteResponseDTO(
+                note.getId(),
+                note.getTitle(),
+                note.getDescription(),
+                note.isPinned(),
+                note.getCreatedAt());
     }
 }

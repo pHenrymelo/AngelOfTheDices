@@ -1,5 +1,12 @@
 package dev.kaiserInc.AngelOfTheDices.character.note.dto;
 
+import java.time.Instant;
 import java.util.UUID;
 
-public record NoteResponseDTO(UUID id, String title, String description) {}
+public record NoteResponseDTO(
+        UUID id,
+        String title,
+        String description,
+        boolean isPined,
+        Instant createdAt
+) {}
