@@ -17,5 +17,5 @@ public class CharacterExpertise {
 
     private boolean hasKit;
 
-    private int otherBonus;
+    private Integer otherBonus;
 }

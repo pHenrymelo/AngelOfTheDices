@@ -7,5 +7,6 @@ import jakarta.validation.constraints.NotNull;
 public record SetExpertiseRequestDTO(
         @NotNull ExpertiseName expertiseName,
         @NotNull TrainingRank trainingRank,
-        Boolean hasKit
+        Boolean hasKit,
+        Integer otherBonus
 ) {}

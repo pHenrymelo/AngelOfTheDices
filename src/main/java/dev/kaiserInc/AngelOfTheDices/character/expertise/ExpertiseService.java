@@ -29,17 +29,22 @@ public class ExpertiseService {
         CharacterExpertise expertiseToUpdate = character.getExpertises().stream()
                 .filter(exp -> exp.getExpertiseName().equals(dto.expertiseName()))
                 .findFirst()
-                .orElse(new CharacterExpertise());
+                .orElse(null);
 
-        expertiseToUpdate.setExpertiseName(dto.expertiseName());
+        if (expertiseToUpdate == null) {
+            expertiseToUpdate = new CharacterExpertise();
+            expertiseToUpdate.setExpertiseName(dto.expertiseName());
+            character.getExpertises().add(expertiseToUpdate);
+        }
+
         expertiseToUpdate.setTrainingRank(dto.trainingRank());
 
         if (dto.hasKit() != null) {
             expertiseToUpdate.setHasKit(dto.hasKit());
         }
-
-        character.getExpertises().remove(expertiseToUpdate);
-        character.getExpertises().add(expertiseToUpdate);
+        if (dto.otherBonus() != null) {
+            expertiseToUpdate.setOtherBonus(dto.otherBonus());
+        }
 
         return charactersRepository.save(character);
     }
