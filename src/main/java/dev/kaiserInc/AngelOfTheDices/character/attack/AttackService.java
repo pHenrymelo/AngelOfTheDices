@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character.attack;
 
+import dev.kaiserInc.AngelOfTheDices.character.CharactersRepository;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackMapper;
 import dev.kaiserInc.AngelOfTheDices.character.attack.dto.AttackRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.character.Character;
@@ -18,12 +19,16 @@ public class AttackService {
 
     private final AttacksRepository attacksRepository;
     private final CharacterService characterService;
+    private final CharactersRepository charactersRepository;
 
     @Autowired
-    public AttackService(AttacksRepository attacksRepository, CharacterService characterService) {
+    public AttackService(AttacksRepository attacksRepository, CharacterService characterService, CharactersRepository charactersRepository) {
         this.attacksRepository = attacksRepository;
         this.characterService = characterService;
+        this.charactersRepository = charactersRepository;
     }
+
+
 
     public Attack createAttackForCharacter(UUID characterId, UUID userId, AttackRequestDTO attackDto) {
         Character character = characterService.findCharacterByIdAndUser(characterId, userId);
@@ -60,12 +65,15 @@ public class AttackService {
     }
 
     public void deleteAttackForCharacter(UUID characterId, UUID attackId, UUID userId) {
-        characterService.findCharacterByIdAndUser(characterId, userId);
-        Attack attackToDelete = attacksRepository.findById(attackId)
-                .orElseThrow(() -> new ForbiddenAccessException("Attack not found."));
-        if (!attackToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbiddenAccessException("Attack does not belong to the specified character.");
-        }
-        attacksRepository.delete(attackToDelete);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
+
+        Attack attackToDelete = character.getAttacks().stream()
+                .filter(attack -> attack.getId().equals(attackId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Attack with id " + attackId + " not found in this character's list."));
+
+        character.getAttacks().remove(attackToDelete);
+
+        charactersRepository.save(character);
     }
 }

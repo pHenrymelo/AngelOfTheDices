@@ -19,13 +19,13 @@ public class AbilityService {
 
     private final AbilitiesRepository abilitiesRepository;
     private final CharacterService characterService;
-    private final CharactersRepository characterRepository;
+    private final CharactersRepository charactersRepository;
 
     @Autowired
     public AbilityService(AbilitiesRepository abilitiesRepository, CharacterService characterService, CharactersRepository characterRepository) {
         this.abilitiesRepository = abilitiesRepository;
         this.characterService = characterService;
-        this.characterRepository = characterRepository;
+        this.charactersRepository = characterRepository;
     }
 
     public Ability createAbilityForCharacter(UUID characterId, UUID userId, AbilityRequestDTO abilityDto) {
@@ -73,7 +73,7 @@ public class AbilityService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ability not found for this character."));
 
         character.getAbilities().remove(abilityToDelete);
-        characterRepository.save(character);
+        charactersRepository.save(character);
     }
 
 

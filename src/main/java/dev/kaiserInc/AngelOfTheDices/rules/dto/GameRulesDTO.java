@@ -1,8 +1,12 @@
 package dev.kaiserInc.AngelOfTheDices.rules.dto;
 
 import dev.kaiserInc.AngelOfTheDices.character.affinity.Affinity;
+import dev.kaiserInc.AngelOfTheDices.character.attack.AttackType;
+import dev.kaiserInc.AngelOfTheDices.character.attack.DiceType;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.Path;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.Attribute;
+import dev.kaiserInc.AngelOfTheDices.character.expertise.ExpertiseName;
 import dev.kaiserInc.AngelOfTheDices.character.origin.Origin;
 import dev.kaiserInc.AngelOfTheDices.character.rank.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.Circle;
@@ -19,5 +23,9 @@ public record GameRulesDTO(
         List<Rank> ranks,
         List<Circle> circles,
         List<ExecutionType> executionTypes,
-        List<RangeType> rangeTypes
+        List<RangeType> rangeTypes,
+        List<AttackType> attackTypes,
+        List<DiceType> diceTypes,
+        List<Attribute> attributes,
+        List<ExpertiseName> expertises
 ) {}

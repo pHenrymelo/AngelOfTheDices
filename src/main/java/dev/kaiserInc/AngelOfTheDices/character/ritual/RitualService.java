@@ -19,13 +19,13 @@ public class RitualService {
 
     private final RitualsRepository ritualsRepository;
     private final CharacterService characterService;
-    private final CharactersRepository characterRepository;
+    private final CharactersRepository charactersRepository;
 
     @Autowired
     public RitualService(RitualsRepository ritualsRepository, CharacterService characterService, CharactersRepository characterRepository) {
         this.ritualsRepository = ritualsRepository;
         this.characterService = characterService;
-        this.characterRepository = characterRepository;
+        this.charactersRepository = characterRepository;
     }
 
     public Ritual createRitualForCharacter(UUID characterId, UUID userId, RitualRequestDTO ritualDto) {
@@ -74,6 +74,6 @@ public class RitualService {
 
         character.getRituals().remove(ritualToDelete);
 
-        characterRepository.save(character);
+        charactersRepository.save(character);
     }
 }
