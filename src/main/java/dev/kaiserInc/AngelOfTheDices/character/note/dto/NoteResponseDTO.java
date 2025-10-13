@@ -7,6 +7,6 @@ public record NoteResponseDTO(
         UUID id,
         String title,
         String description,
-        boolean isPined,
+        boolean isPinned,
         Instant createdAt
 ) {}

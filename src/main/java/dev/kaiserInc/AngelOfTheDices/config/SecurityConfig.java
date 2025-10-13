@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 "/classes",
                                 "/affinities",
                                 "/ranks",
+                                "/rules",
                                 "/portraits/**"
                         ).permitAll()
                         .anyRequest().authenticated()
