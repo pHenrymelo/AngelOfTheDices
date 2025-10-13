@@ -2,6 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.ritual;
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
+import dev.kaiserInc.AngelOfTheDices.character.CharactersRepository;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualMapper;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.dto.RitualRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
@@ -18,11 +19,13 @@ public class RitualService {
 
     private final RitualsRepository ritualsRepository;
     private final CharacterService characterService;
+    private final CharactersRepository characterRepository;
 
     @Autowired
-    public RitualService(RitualsRepository ritualsRepository, CharacterService characterService) {
+    public RitualService(RitualsRepository ritualsRepository, CharacterService characterService, CharactersRepository characterRepository) {
         this.ritualsRepository = ritualsRepository;
         this.characterService = characterService;
+        this.characterRepository = characterRepository;
     }
 
     public Ritual createRitualForCharacter(UUID characterId, UUID userId, RitualRequestDTO ritualDto) {
@@ -62,16 +65,15 @@ public class RitualService {
     }
 
     public void deleteRitualForCharacter(UUID characterId, UUID ritualId, UUID userId) {
-        characterService.findCharacterByIdAndUser(characterId, userId);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
-        Ritual ritualToDelete = ritualsRepository.findById(ritualId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ritual not found."));
+        Ritual ritualToDelete = character.getRituals().stream()
+                .filter(ritual -> ritual.getId().equals(ritualId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Ritual not found for this character."));
 
-        if (!ritualToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbiddenAccessException("Ritual does not belong to the specified character.");
-        }
+        character.getRituals().remove(ritualToDelete);
 
-        ritualsRepository.delete(ritualToDelete);
-
+        characterRepository.save(character);
     }
 }

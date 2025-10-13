@@ -2,6 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.ability;
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
+import dev.kaiserInc.AngelOfTheDices.character.CharactersRepository;
 import dev.kaiserInc.AngelOfTheDices.character.ability.dto.AbilityMapper;
 import dev.kaiserInc.AngelOfTheDices.character.ability.dto.AbilityRequestDTO;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
@@ -18,11 +19,13 @@ public class AbilityService {
 
     private final AbilitiesRepository abilitiesRepository;
     private final CharacterService characterService;
+    private final CharactersRepository characterRepository;
 
     @Autowired
-    public AbilityService(AbilitiesRepository abilitiesRepository, CharacterService characterService) {
+    public AbilityService(AbilitiesRepository abilitiesRepository, CharacterService characterService, CharactersRepository characterRepository) {
         this.abilitiesRepository = abilitiesRepository;
         this.characterService = characterService;
+        this.characterRepository = characterRepository;
     }
 
     public Ability createAbilityForCharacter(UUID characterId, UUID userId, AbilityRequestDTO abilityDto) {
@@ -62,17 +65,15 @@ public class AbilityService {
     }
 
     public void deleteAbilityForCharacter(UUID characterId, UUID abilityId, UUID userId) {
-        characterService.findCharacterByIdAndUser(characterId, userId);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
-        Ability abilityToDelete = abilitiesRepository.findById(abilityId)
-                .orElseThrow(() -> new ResourceNotFoundException("Ability not found."));
+        Ability abilityToDelete = character.getAbilities().stream()
+                .filter(ability -> ability.getId().equals(abilityId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Ability not found for this character."));
 
-        if (!abilityToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbiddenAccessException("Ability does not belong to the specified character.");
-        }
-
-        abilitiesRepository.delete(abilityToDelete);
-
+        character.getAbilities().remove(abilityToDelete);
+        characterRepository.save(character);
     }
 
 
