@@ -2,6 +2,7 @@ package dev.kaiserInc.AngelOfTheDices.character.item;
 
 import dev.kaiserInc.AngelOfTheDices.character.Character;
 import dev.kaiserInc.AngelOfTheDices.character.CharacterService;
+import dev.kaiserInc.AngelOfTheDices.character.CharactersRepository;
 import dev.kaiserInc.AngelOfTheDices.character.item.dto.ItemMapper;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ForbiddenAccessException;
 import dev.kaiserInc.AngelOfTheDices.exception.types.ResourceNotFoundException;
@@ -18,11 +19,13 @@ public class InventoryService {
 
     private final ItemsRepository itemsRepository;
     private final CharacterService characterService;
+    private final CharactersRepository charactersRepository;
 
     @Autowired
-    public InventoryService(CharacterService characterService, ItemsRepository itemsRepository) {
+    public InventoryService(ItemsRepository itemsRepository, CharacterService characterService, CharactersRepository charactersRepository) {
         this.itemsRepository = itemsRepository;
         this.characterService = characterService;
+        this.charactersRepository = charactersRepository;
     }
 
     public Item createItemForCharacter(UUID characterId, UUID userId, ItemRequestDTO itemDto) {
@@ -55,15 +58,15 @@ public class InventoryService {
     }
 
     public void deleteItemForCharacter(UUID characterId, UUID itemId, UUID userId) {
-        characterService.findCharacterByIdAndUser(characterId, userId);
+        Character character = characterService.findCharacterByIdAndUser(characterId, userId);
 
-        Item itemToDelete = itemsRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item not found"));
+        Item itemToDelete = character.getInventory().stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + itemId + " not found in this character's inventory."));
 
-        if (!itemToDelete.getCharacter().getId().equals(characterId)) {
-            throw new ForbiddenAccessException("Item does not belong to the specified character.");
-        }
+        character.getInventory().remove(itemToDelete);
 
-        itemsRepository.delete(itemToDelete);
+        charactersRepository.save(character);
     }
 }
