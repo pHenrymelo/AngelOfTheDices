@@ -32,6 +32,7 @@ public record CharacterUpdateRequestDTO(
         @NotNull @Min(1) Integer maxHitPoints,
         @NotNull @Min(1) Integer maxEffortPoints,
         @NotNull @Min(1) Integer maxSanity,
+        @NotNull @Min(1) Integer maxDeterminationPoints,
 
         Boolean useDeterminationPoints,
 

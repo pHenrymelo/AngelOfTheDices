@@ -60,6 +60,7 @@ public final class CharacterMapper {
         character.setMaxHitPoints(dto.maxHitPoints());
         character.setMaxEffortPoints(dto.maxEffortPoints());
         character.setMaxSanity(dto.maxSanity());
+        character.setMaxDeterminationPoints(dto.maxDeterminationPoints());
         character.setRank(dto.rank());
         character.setPrestigePoints(dto.prestigePoints());
         if (dto.useDeterminationPoints() != null) {

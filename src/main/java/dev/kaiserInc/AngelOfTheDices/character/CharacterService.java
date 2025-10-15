@@ -80,16 +80,20 @@ public class CharacterService {
         Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
         CharacterMapper.updateEntityFromDTO(dto, characterToUpdate);
 
-        this.calculateStats(characterToUpdate);
-
         if (characterToUpdate.getCurrentHitPoints() > characterToUpdate.getMaxHitPoints()) {
             characterToUpdate.setCurrentHitPoints(characterToUpdate.getMaxHitPoints());
         }
-        if (characterToUpdate.getCurrentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
-            characterToUpdate.setCurrentEffortPoints(characterToUpdate.getMaxEffortPoints());
-        }
-        if (characterToUpdate.getCurrentSanity() > characterToUpdate.getMaxSanity()) {
-            characterToUpdate.setCurrentSanity(characterToUpdate.getMaxSanity());
+        if (characterToUpdate.isUseDeterminationPoints()) {
+            if (characterToUpdate.getCurrentDeterminationPoints() > characterToUpdate.getMaxDeterminationPoints()) {
+                characterToUpdate.setCurrentDeterminationPoints(characterToUpdate.getMaxDeterminationPoints());
+            }
+        } else {
+            if (characterToUpdate.getCurrentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
+                characterToUpdate.setCurrentEffortPoints(characterToUpdate.getMaxEffortPoints());
+            }
+            if (characterToUpdate.getCurrentSanity() > characterToUpdate.getMaxSanity()) {
+                characterToUpdate.setCurrentSanity(characterToUpdate.getMaxSanity());
+            }
         }
 
         return charactersRepository.save(characterToUpdate);
@@ -112,7 +116,7 @@ public class CharacterService {
                 }
                 characterToUpdate.setCurrentDeterminationPoints(dto.currentDeterminationPoints());
             }
-        } else { // Se a regra de PD estiver DESATIVADA
+        } else {
             if (dto.currentEffortPoints() != null) {
                 if (dto.currentEffortPoints() < 0 || dto.currentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
                     throw new BusinessRuleException("Invalid Effort Points value.");
