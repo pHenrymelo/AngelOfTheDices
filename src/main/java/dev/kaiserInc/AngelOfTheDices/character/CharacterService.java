@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,28 +45,13 @@ public class CharacterService {
 
         Character newCharacter = CharacterMapper.toEntity(dto);
         newCharacter.setUser(user);
-        int nex = dto.nex();
-        int level = Math.round(((float) nex / 5));
 
-        if (level < 1) {
-            level = 1;
-        }
+        this.calculateStats(newCharacter);
 
-        CharacterClass selectedClass = dto.characterClass();
-
-        int maxHp = selectedClass.getBaseHitPoints() + ((level - 1) * selectedClass.getHpPerLevel()) + (level * dto.vigor());
-        int maxEp = selectedClass.getBaseEffortPoints() + ((level - 1) * selectedClass.getEpPerLevel()) + (level * dto.presence());
-        int maxSan = selectedClass.getBaseSanity() + ((level - 1) * selectedClass.getSanPerLevel());
-
-
-        newCharacter.setMaxHitPoints(maxHp);
-        newCharacter.setCurrentHitPoints(maxHp);
-
-        newCharacter.setMaxEffortPoints(maxEp);
-        newCharacter.setCurrentEffortPoints(maxEp);
-
-        newCharacter.setMaxSanity(maxSan);
-        newCharacter.setCurrentSanity(maxSan);
+        newCharacter.setCurrentHitPoints(newCharacter.getMaxHitPoints());
+        newCharacter.setCurrentEffortPoints(newCharacter.getMaxEffortPoints());
+        newCharacter.setCurrentSanity(newCharacter.getMaxSanity());
+        newCharacter.setCurrentDeterminationPoints(newCharacter.getMaxDeterminationPoints());
 
         return charactersRepository.save(newCharacter);
     }
@@ -88,13 +72,15 @@ public class CharacterService {
     }
 
     public Character updateCharacter(UUID characterId, UUID userId, CharacterUpdateRequestDTO dto) {
-        Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
 
         if (dto.characterClass() == CharacterClass.SURVIVOR && dto.nex() != 0) {
             throw new BusinessRuleException("A classe Sobrevivente só pode ter NEX 0%.");
         }
 
+        Character characterToUpdate = this.findCharacterByIdAndUser(characterId, userId);
         CharacterMapper.updateEntityFromDTO(dto, characterToUpdate);
+
+        this.calculateStats(characterToUpdate);
 
         if (characterToUpdate.getCurrentHitPoints() > characterToUpdate.getMaxHitPoints()) {
             characterToUpdate.setCurrentHitPoints(characterToUpdate.getMaxHitPoints());
@@ -119,19 +105,26 @@ public class CharacterService {
             characterToUpdate.setCurrentHitPoints(dto.currentHitPoints());
         }
 
-        if (dto.currentEffortPoints() != null) {
-            if (dto.currentEffortPoints() < 0 || dto.currentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
-                throw new BusinessRuleException("Invalid Effort Points value.");
+        if (characterToUpdate.isUseDeterminationPoints()) {
+            if (dto.currentDeterminationPoints() != null) {
+                if (dto.currentDeterminationPoints() < 0 || dto.currentDeterminationPoints() > characterToUpdate.getMaxDeterminationPoints()) {
+                    throw new BusinessRuleException("Invalid Determination Points value.");
+                }
+                characterToUpdate.setCurrentDeterminationPoints(dto.currentDeterminationPoints());
             }
-            characterToUpdate.setCurrentEffortPoints(dto.currentEffortPoints());
-        }
-
-
-        if (dto.currentSanity() != null) {
-            if (dto.currentSanity() < 0 || dto.currentSanity() > characterToUpdate.getMaxSanity()) {
-                throw new BusinessRuleException("Invalid Sanity value.");
+        } else { // Se a regra de PD estiver DESATIVADA
+            if (dto.currentEffortPoints() != null) {
+                if (dto.currentEffortPoints() < 0 || dto.currentEffortPoints() > characterToUpdate.getMaxEffortPoints()) {
+                    throw new BusinessRuleException("Invalid Effort Points value.");
+                }
+                characterToUpdate.setCurrentEffortPoints(dto.currentEffortPoints());
             }
-            characterToUpdate.setCurrentSanity(dto.currentSanity());
+            if (dto.currentSanity() != null) {
+                if (dto.currentSanity() < 0 || dto.currentSanity() > characterToUpdate.getMaxSanity()) {
+                    throw new BusinessRuleException("Invalid Sanity value.");
+                }
+                characterToUpdate.setCurrentSanity(dto.currentSanity());
+            }
         }
 
         return charactersRepository.save(characterToUpdate);
@@ -158,5 +151,32 @@ public class CharacterService {
 
         character.setPortraitUrl(fileUrl);
         return charactersRepository.save(character);
+    }
+
+    private void calculateStats(Character character) {
+        CharacterClass selectedClass = character.getCharacterClass();
+        int nex = character.getNex();
+        int presence = character.getPresence();
+        int vigor = character.getVigor();
+        int level;
+
+        if (nex >= 99) {
+            level = 20;
+        } else {
+            level = Math.max(1, nex / 5);
+        }
+
+        int maxHp = selectedClass.getBaseHitPoints() + ((level - 1) * selectedClass.getHpPerLevel()) + (level * vigor);
+        character.setMaxHitPoints(maxHp);
+
+        int maxEp = selectedClass.getBaseEffortPoints() + ((level - 1) * selectedClass.getEpPerLevel()) + (level * presence);
+        character.setMaxEffortPoints(maxEp);
+
+        int maxSan = selectedClass.getBaseSanity() + ((level - 1) * selectedClass.getSanPerLevel());
+        character.setMaxSanity(maxSan);
+
+        int maxDp = selectedClass.getBaseDeterminationPoints() + ((level - 1) * selectedClass.getDpPerLevel()) + (level * presence);
+        character.setMaxDeterminationPoints(maxDp);
+
     }
 }

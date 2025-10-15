@@ -8,5 +8,7 @@ public record CharacterStatusUpdateDTO(
         @Min(value = 0, message = "Effort points cannot be negative.")
         Integer currentEffortPoints,
         @Min(value = 0, message = "Sanity cannot be negative.")
-        Integer currentSanity
+        Integer currentSanity,
+        @Min(value = 0, message = "Determination cannot be negative.")
+        Integer currentDeterminationPoints
 ) {}

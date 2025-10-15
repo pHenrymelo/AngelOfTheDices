@@ -71,6 +71,10 @@ public class Character {
     private Integer maxSanity;
     private Integer currentSanity;
 
+    private boolean useDeterminationPoints = false;
+    private Integer maxDeterminationPoints;
+    private Integer currentDeterminationPoints;
+
     private Integer armorDefenseBonus;
     private Integer otherDefenseBonus;
 

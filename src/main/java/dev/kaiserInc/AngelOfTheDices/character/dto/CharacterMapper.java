@@ -37,6 +37,7 @@ public final class CharacterMapper {
         character.setVigor(dto.vigor());
         character.setRank(dto.rank());
         character.setPrestigePoints(dto.prestigePoints());
+        character.setUseDeterminationPoints(dto.useDeterminationPoints());
         character.setArmorDefenseBonus(dto.armorDefenseBonus() != null ? dto.armorDefenseBonus() : 0);
         character.setOtherDefenseBonus(dto.otherDefenseBonus() != null ? dto.otherDefenseBonus() : 0);
         return character;
@@ -61,6 +62,9 @@ public final class CharacterMapper {
         character.setMaxSanity(dto.maxSanity());
         character.setRank(dto.rank());
         character.setPrestigePoints(dto.prestigePoints());
+        if (dto.useDeterminationPoints() != null) {
+            character.setUseDeterminationPoints(dto.useDeterminationPoints());
+        }
         if (dto.armorDefenseBonus() != null) {
             character.setArmorDefenseBonus(dto.armorDefenseBonus());
         }
@@ -135,6 +139,9 @@ public final class CharacterMapper {
                 character.getMaxHitPoints(), character.getCurrentHitPoints(),
                 character.getMaxEffortPoints(), character.getCurrentEffortPoints(),
                 character.getMaxSanity(), character.getCurrentSanity(),
+                character.isUseDeterminationPoints(),
+                character.getMaxDeterminationPoints(),
+                character.getCurrentDeterminationPoints(),
                 pePerRound,
                 movement,
                 defenseDto,

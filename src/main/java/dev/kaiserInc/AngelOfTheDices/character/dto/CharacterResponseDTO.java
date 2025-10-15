@@ -42,6 +42,10 @@ public record CharacterResponseDTO(
         Integer maxEffortPoints, Integer currentEffortPoints,
         Integer maxSanity, Integer currentSanity,
 
+        boolean useDeterminationPoints,
+        Integer maxDeterminationPoints,
+        Integer currentDeterminationPoints,
+
         // Bloco 5: Dados Calculados
         Integer pePerRound,
         Integer movement,

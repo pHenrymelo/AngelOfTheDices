@@ -29,6 +29,9 @@ public record CharacterCreateRequestDTO(
         @NotNull Integer presence,
         @NotNull Integer vigor,
 
+        @NotNull(message = "É necessário especificar se a regra de Pontos de Determinação será usada.")
+        Boolean useDeterminationPoints,
+
         Integer armorDefenseBonus,
         Integer otherDefenseBonus
 ) {}

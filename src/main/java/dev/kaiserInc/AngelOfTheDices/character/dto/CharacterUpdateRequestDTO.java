@@ -33,6 +33,8 @@ public record CharacterUpdateRequestDTO(
         @NotNull @Min(1) Integer maxEffortPoints,
         @NotNull @Min(1) Integer maxSanity,
 
+        Boolean useDeterminationPoints,
+
         Integer armorDefenseBonus,
         Integer otherDefenseBonus
 ) {}
