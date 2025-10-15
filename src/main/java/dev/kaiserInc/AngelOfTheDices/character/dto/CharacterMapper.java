@@ -61,8 +61,12 @@ public final class CharacterMapper {
         character.setMaxSanity(dto.maxSanity());
         character.setRank(dto.rank());
         character.setPrestigePoints(dto.prestigePoints());
-        character.setArmorDefenseBonus(dto.armorDefenseBonus());
-        character.setOtherDefenseBonus(dto.otherDefenseBonus());
+        if (dto.armorDefenseBonus() != null) {
+            character.setArmorDefenseBonus(dto.armorDefenseBonus());
+        }
+        if (dto.otherDefenseBonus() != null) {
+            character.setOtherDefenseBonus(dto.otherDefenseBonus());
+        }
     }
 
 
