@@ -44,34 +44,33 @@ public final class CharacterMapper {
     }
 
     public static void updateEntityFromDTO(CharacterUpdateRequestDTO dto, Character character) {
-        character.setName(dto.name());
-        character.setAge(dto.age());
-        character.setGender(dto.gender());
-        character.setOrigin(dto.origin());
-        character.setCharacterClass(dto.characterClass());
-        character.setPath(dto.path());
-        character.setAffinity(dto.affinity());
-        character.setNex(dto.nex());
-        character.setStrength(dto.strength());
-        character.setAgility(dto.agility());
-        character.setIntellect(dto.intellect());
-        character.setPresence(dto.presence());
-        character.setVigor(dto.vigor());
-        character.setMaxHitPoints(dto.maxHitPoints());
-        character.setMaxEffortPoints(dto.maxEffortPoints());
-        character.setMaxSanity(dto.maxSanity());
-        character.setMaxDeterminationPoints(dto.maxDeterminationPoints());
-        character.setRank(dto.rank());
-        character.setPrestigePoints(dto.prestigePoints());
-        if (dto.useDeterminationPoints() != null) {
-            character.setUseDeterminationPoints(dto.useDeterminationPoints());
-        }
-        if (dto.armorDefenseBonus() != null) {
-            character.setArmorDefenseBonus(dto.armorDefenseBonus());
-        }
-        if (dto.otherDefenseBonus() != null) {
-            character.setOtherDefenseBonus(dto.otherDefenseBonus());
-        }
+        if (dto.name() != null) character.setName(dto.name());
+        if (dto.age() != null) character.setAge(dto.age());
+        if (dto.gender() != null) character.setGender(dto.gender());
+        if (dto.origin() != null) character.setOrigin(dto.origin());
+        if (dto.characterClass() != null) character.setCharacterClass(dto.characterClass());
+        if (dto.path() != null) character.setPath(dto.path());
+        if (dto.affinity() != null) character.setAffinity(dto.affinity());
+        if (dto.nex() != null) character.setNex(dto.nex());
+        if (dto.strength() != null) character.setStrength(dto.strength());
+        if (dto.agility() != null) character.setAgility(dto.agility());
+        if (dto.intellect() != null) character.setIntellect(dto.intellect());
+        if (dto.presence() != null) character.setPresence(dto.presence());
+        if (dto.vigor() != null) character.setVigor(dto.vigor());
+        if (dto.maxHitPoints() != null) character.setMaxHitPoints(dto.maxHitPoints());
+        if (dto.maxEffortPoints() != null) character.setMaxEffortPoints(dto.maxEffortPoints());
+        if (dto.maxSanity() != null) character.setMaxSanity(dto.maxSanity());
+        if (dto.maxDeterminationPoints() != null) character.setMaxDeterminationPoints(dto.maxDeterminationPoints());
+        if (dto.rank() != null) character.setRank(dto.rank());
+        if (dto.prestigePoints() != null) character.setPrestigePoints(dto.prestigePoints());
+        if (dto.useDeterminationPoints() != null) character.setUseDeterminationPoints(dto.useDeterminationPoints());
+        if (dto.armorDefenseBonus() != null) character.setArmorDefenseBonus(dto.armorDefenseBonus());
+        if (dto.otherDefenseBonus() != null) character.setOtherDefenseBonus(dto.otherDefenseBonus());
+        if (dto.maxLoadBonus() != null) character.setMaxLoadBonus(dto.maxLoadBonus());
+        if (dto.pePerRoundBonus() != null) character.setPePerRoundBonus(dto.pePerRoundBonus());
+        if (dto.dodgeBonus() != null) character.setDodgeBonus(dto.dodgeBonus());
+        if (dto.blockBonus() != null) character.setBlockBonus(dto.blockBonus());
+        if (dto.movementBonus() != null) character.setMovementBonus(dto.movementBonus());
     }
 
 
@@ -81,15 +80,22 @@ public final class CharacterMapper {
                 ? character.getUser().getName()
                 : "???";
 
-        int pePerRound = (character.getNex() != null && character.getNex() >= 5)
+        int basePePerRound = (character.getNex() != null && character.getNex() >= 5)
                 ? Math.round((float) character.getNex() / 5)
                 : 1;
+        int pePerRoundBonus = character.getPePerRoundBonus() != null ? character.getPePerRoundBonus() : 0;
+        int pePerRound = basePePerRound + pePerRoundBonus;
 
 
         int currentLoad = character.getInventory().stream().mapToInt(Item::getSpaces).sum();
-        int maxLoad = character.getMaxLoad();
+        int baseMaxLoad = character.getMaxLoad();
+        int maxLoadBonus = character.getMaxLoadBonus() != null ? character.getMaxLoadBonus() : 0;
+        int maxLoad = baseMaxLoad + maxLoadBonus;
 
-        int movement = 9;
+        int baseMovement = 9;
+        int movementBonus = character.getMovementBonus() != null ? character.getMovementBonus() : 0;
+        int movement = baseMovement + movementBonus;
+
         if (currentLoad > maxLoad) {
             movement = Math.max(3, movement - 3);
         }
@@ -148,6 +154,11 @@ public final class CharacterMapper {
                 defenseDto,
                 maxLoad,
                 currentLoad,
+                character.getMaxLoadBonus(),
+                character.getPePerRoundBonus(),
+                character.getDodgeBonus(),
+                character.getBlockBonus(),
+                character.getMovementBonus(),
                 character.getExpertises(),
                 inventoryDtos,
                 attackDtos,
