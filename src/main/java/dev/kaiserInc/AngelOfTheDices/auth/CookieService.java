@@ -18,13 +18,16 @@ public class CookieService {
     @Value("${cookie.secure}")
     private boolean cookieSecure;
 
+    @Value("${cookie.same-site}")
+    private String sameSitePolicy;
+
     public ResponseCookie createRefreshTokenCookie(String token) {
         return ResponseCookie.from(refreshTokenCookieName, token)
                 .httpOnly(true)
                 .secure(cookieSecure)
                 .path("/")
                 .maxAge(refreshTokenDuration)
-                .sameSite("None")
+                .sameSite(sameSitePolicy)
                 .build();
     }
 
@@ -34,7 +37,7 @@ public class CookieService {
                 .secure(cookieSecure)
                 .path("/")
                 .maxAge(0)
-                .sameSite("None")
+                .sameSite(sameSitePolicy)
                 .build();
     }
 }
