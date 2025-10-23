@@ -23,11 +23,11 @@ public record CharacterCreateRequestDTO(
         @NotNull @Min(0) Integer nex,
         @NotNull @Min(0) Integer prestigePoints,
 
-        @NotNull Integer strength,
-        @NotNull Integer agility,
-        @NotNull Integer intellect,
-        @NotNull Integer presence,
-        @NotNull Integer vigor,
+        @NotNull @Min(0) Integer strength,
+        @NotNull @Min(0) Integer agility,
+        @NotNull @Min(0) Integer intellect,
+        @NotNull @Min(0) Integer presence,
+        @NotNull @Min(0) Integer vigor,
 
         @NotNull(message = "É necessário especificar se a regra de Pontos de Determinação será usada.")
         Boolean useDeterminationPoints,

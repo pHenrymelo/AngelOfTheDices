@@ -75,10 +75,16 @@ public class Character {
     private Integer maxDeterminationPoints;
     private Integer currentDeterminationPoints;
 
-    private Integer armorDefenseBonus;
-    private Integer otherDefenseBonus;
+    private Integer armorDefenseBonus = 0;
+    private Integer otherDefenseBonus = 0;
 
     private Integer prestigePoints;
+
+    private Integer maxLoadBonus = 0;
+    private Integer pePerRoundBonus = 0;
+    private Integer dodgeBonus = 0;
+    private Integer blockBonus = 0;
+    private Integer movementBonus = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

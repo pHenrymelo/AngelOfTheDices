@@ -53,6 +53,12 @@ public record CharacterResponseDTO(
         Integer maxLoad,
         Integer currentLoad,
 
+        Integer maxLoadBonus,
+        Integer pePerRoundBonus,
+        Integer dodgeBonus,
+        Integer blockBonus,
+        Integer movementBonus,
+
         // Bloco 6: Coleções
         Set<CharacterExpertise> expertises,
         List<ItemResponseDTO> inventory,
