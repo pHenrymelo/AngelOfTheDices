@@ -22,15 +22,16 @@ public class TokenService {
     @Value("${jwt.refresh.secret}")
     private String jwtRefreshSecret;
 
-    private final long FifteenMinutesInMilisseconds = 1000 * 60 * 15;
-    private final long SevenDaysInMilisseconds = 1000 * 60 * 60 * 24 * 7;
+    private final long FifteenMinutesInMilliseconds = 1000 * 60 * 15;
+    private final long OneDayInMilliseconds = 1000 * 60 * 60 * 24;
+    private final long SevenDaysInMilliseconds = 1000 * 60 * 60 * 24 * 7;
 
     public String generateAccessToken(User user) {
-        return generateToken(user.getId().toString(), FifteenMinutesInMilisseconds, jwtSecret);
+        return generateToken(user.getId().toString(), OneDayInMilliseconds, jwtSecret);
     }
 
     public String generateRefreshToken(User user) {
-        return generateToken(user.getId().toString(), SevenDaysInMilisseconds, jwtRefreshSecret);
+        return generateToken(user.getId().toString(), SevenDaysInMilliseconds, jwtRefreshSecret);
     }
 
     public String generateToken(String subject, long duration, String secret) {
