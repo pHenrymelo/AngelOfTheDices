@@ -1,5 +1,6 @@
 package dev.kaiserInc.AngelOfTheDices.character;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.kaiserInc.AngelOfTheDices.character.ability.Ability;
 import dev.kaiserInc.AngelOfTheDices.character.affinity.Affinity;
 import dev.kaiserInc.AngelOfTheDices.character.classPath.CharacterClass;
@@ -11,6 +12,7 @@ import dev.kaiserInc.AngelOfTheDices.character.item.Item;
 import dev.kaiserInc.AngelOfTheDices.character.attack.Attack;
 import dev.kaiserInc.AngelOfTheDices.character.rank.Rank;
 import dev.kaiserInc.AngelOfTheDices.character.ritual.Ritual;
+import dev.kaiserInc.AngelOfTheDices.table.GameTable;
 import dev.kaiserInc.AngelOfTheDices.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -89,6 +91,11 @@ public class Character {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_table_id")
+    @JsonIgnore
+    private GameTable gameTable;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "character_expertises", joinColumns = @JoinColumn(name = "character_id"))
